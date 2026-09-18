@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pratap Choudhary — FY BSc Data Science student, Data Analyst with AI & ML. Interactive neural network portfolio with 16 projects.">
+<meta name="theme-color" content="#000000">
+<title>Pratap Choudhary | Data Analyst · AI & ML</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 80px; }
+
+  :root {
+    --bg: #000000;
+    --text: #e8ecf4;
+    --text-dim: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #4d9fff;
+    --accent-2: #22d3ee;
+    --accent-3: #10d97a;
+    --accent-4: #f5c84b;
+    --border: rgba(120, 160, 220, 0.18);
+    --border-hover: rgba(120, 160, 220, 0.45);
+    --glass: rgba(8, 12, 22, 0.55);
+    --glass-strong: rgba(8, 12, 22, 0.85);
+    --font: 'Inter', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    --radius-sm: 8px;
+    --radius: 14px;
+    --radius-pill: 100px;
+    --shadow-md: 0 20px 50px -20px rgba(77, 159, 255, 0.25);
+    --shadow-lg: 0 30px 80px -30px rgba(0, 0, 0, 0.8);
+    --transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  [data-theme="aurora"] { --accent: #10d97a; --accent-2: #88ffcc; --accent-3: #22d3ee; --accent-4: #f5c84b; }
+  [data-theme="nebula"] { --accent: #aa88ff; --accent-2: #ff88cc; --accent-3: #22d3ee; --accent-4: #f5c84b; }
+  [data-theme="solar"]  { --accent: #f5c84b; --accent-2: #ff9f43; --accent-3: #10d97a; --accent-4: #4d9fff; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    cursor: crosshair;
+  }
+
+  .skip-link { position: fixed; top: -100px; left: 20px; background: var(--accent); color: #000; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; z-index: 10000; transition: top 0.3s; }
+  .skip-link:focus { top: 20px; }
+
+  #loader { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s; }
+  #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-ring { width: 56px; height: 56px; border: 2px solid rgba(77, 159, 255, 0.15); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text { margin-top: 24px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--accent); }
+  .loader-progress { margin-top: 16px; width: 200px; height: 2px; background: rgba(77, 159, 255, 0.15); border-radius: 2px; overflow: hidden; }
+  .loader-progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s; }
+
+  #cursor-glow { position: fixed; width: 480px; height: 480px; border-radius: 50%; background: radial-gradient(circle, rgba(77, 159, 255, 0.12) 0%, transparent 65%); pointer-events: none; z-index: 4; transform: translate(-50%, -50%); will-change: transform; }
+
+  #canvas-container { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--bg); }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: var(--glass-strong); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); transition: padding 0.3s; }
+  nav.scrolled { padding: 10px 40px; }
+
+  .nav-logo { font-weight: 700; font-size: 0.95rem; letter-spacing: 0.15em; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .nav-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 6px; align-items: center; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; font-weight: 500; padding: 8px 14px; border-radius: var(--radius-sm); transition: color 0.25s; position: relative; }
+  .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.04); }
+  .nav-links a.active { color: var(--accent); }
+  .nav-links a.active::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 20px; height: 2px; background: var(--accent); border-radius: 2px; box-shadow: 0 0 10px var(--accent); }
+
+  .nav-clock { font-family: var(--mono); font-size: 0.72rem; color: var(--accent-2); padding: 5px 12px; border: 1px solid var(--border); border-radius: var(--radius-pill); margin-left: 8px; }
+
+  .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 6px 12px; border-radius: var(--radius-pill); font-size: 0.72rem; font-family: var(--font); cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px; margin-left: 6px; }
+  .nav-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .nav-btn.active { color: var(--accent-3); border-color: var(--accent-3); background: rgba(16, 217, 122, 0.08); }
+  .nav-btn svg { width: 14px; height: 14px; }
+
+  .nav-burger { display: none; background: transparent; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; }
+  @media (max-width: 900px) { nav { padding: 12px 20px; } .nav-links { display: none; } .nav-burger { display: flex; } }
+
+  .mobile-drawer { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: var(--glass-strong); backdrop-filter: blur(20px); border-left: 1px solid var(--border); z-index: 700; padding: 80px 24px 24px; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; gap: 8px; }
+  .mobile-drawer.open { right: 0; }
+  .mobile-drawer a { color: var(--text-dim); text-decoration: none; font-size: 1rem; font-weight: 500; padding: 14px 16px; border-radius: var(--radius-sm); transition: all 0.25s; }
+  .mobile-drawer a:hover { color: var(--accent); background: rgba(77, 159, 255, 0.06); }
+  .drawer-close { position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid var(--border); color: var(--text); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; }
+
+  #progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3)); z-index: 600; box-shadow: 0 0 12px var(--accent); transition: width 0.08s linear; }
+
+  .section-dots { position: fixed; right: 24px; top: 50%; transform: translateY(-50%); z-index: 400; display: flex; flex-direction: column; gap: 14px; }
+  .section-dots .dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--border-hover); background: transparent; cursor: pointer; padding: 0; transition: all 0.3s; position: relative; }
+  .section-dots .dot:hover { border-color: var(--accent); transform: scale(1.2); }
+  .section-dots .dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 12px var(--accent); transform: scale(1.2); }
+  .section-dots .dot::after { content: attr(data-label); position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%); background: var(--glass-strong); border: 1px solid var(--border); padding: 4px 10px; border-radius: var(--radius-sm); font-size: 0.68rem; font-family: var(--mono); color: var(--text); opacity: 0; pointer-events: none; white-space: nowrap; transition: opacity 0.25s; }
+  .section-dots .dot:hover::after { opacity: 1; }
+  @media (max-width: 900px) { .section-dots { display: none; } }
+
+  #hud-stats { position: fixed; top: 84px; left: 40px; z-index: 400; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+  .hud-chip { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--border); padding: 6px 14px; border-radius: var(--radius-pill); font-family: var(--mono); font-size: 0.68rem; color: var(--accent-2); position: relative; overflow: hidden; }
+  .hud-chip .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-3); margin-right: 6px; box-shadow: 0 0 8px var(--accent-3); animation: livePulse 1.5s infinite; }
+  @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @media (max-width: 700px) { #hud-stats { display: none; } }
+
+  #back-top { position: fixed; bottom: 90px; right: 40px; z-index: 500; width: 42px; height: 42px; border-radius: 50%; background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--border); color: var(--accent); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.3s; }
+  #back-top.show { opacity: 1; pointer-events: auto; }
+  #back-top:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+  .content-wrapper { position: relative; z-index: 10; max-width: 1140px; margin: 0 auto; padding: 130px 32px 80px; }
+
+  section { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; padding: 60px 0; margin-bottom: 40px; opacity: 0; transform: translateY(30px); transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), transform 0.9s cubic-bezier(0.4, 0, 0.2, 1); }
+  section.revealed { opacity: 1; transform: translateY(0); }
+
+  h1 { font-size: clamp(2.6rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; color: #fff; margin-bottom: 12px; }
+  h2 { font-size: clamp(1.5rem, 3vw, 1.85rem); font-weight: 700; letter-spacing: -0.02em; color: #fff; padding-bottom: 16px; margin-bottom: 36px; border-bottom: 1px solid var(--border); position: relative; }
+  h2::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 60px; height: 2px; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  h3 { font-size: 1.02rem; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  p { color: var(--text-dim); margin-bottom: 12px; }
+
+  .hero-tag { display: inline-block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent-2); padding: 6px 14px; border: 1px solid rgba(34, 211, 238, 0.35); border-radius: var(--radius-pill); margin-bottom: 20px; }
+  #typewriter { font-family: var(--mono); font-size: 1rem; color: var(--accent-4); margin-bottom: 24px; min-height: 1.5em; }
+  #typewriter::after { content: '▊'; color: var(--accent); animation: blink 1s step-end infinite; margin-left: 2px; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .contact-info { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-bottom: 32px; font-size: 0.85rem; }
+  .contact-info a, .contact-info span, .contact-info button { color: var(--text-dim); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.25s; background: none; border: none; padding: 0; font-family: inherit; font-size: inherit; cursor: pointer; }
+  .contact-info a:hover, .contact-info button:hover { color: var(--accent); }
+  .contact-info svg { width: 14px; height: 14px; opacity: 0.7; }
+  .copy-badge { font-family: var(--mono); font-size: 0.6rem; padding: 1px 6px; border-radius: var(--radius-sm); background: rgba(77, 159, 255, 0.12); color: var(--accent); opacity: 0; transition: opacity 0.25s; }
+  .contact-info button:hover .copy-badge { opacity: 1; }
+  .contact-info button.copied .copy-badge { opacity: 1; background: rgba(16, 217, 122, 0.15); color: var(--accent-3); }
+
+  .btn-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 26px; border-radius: var(--radius-pill); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.02em; text-decoration: none; cursor: pointer; transition: all var(--transition); border: 1px solid transparent; white-space: nowrap; }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-primary { background: var(--accent); color: #000814; border-color: var(--accent); }
+  .btn-primary:hover { background: transparent; color: var(--accent); box-shadow: 0 0 30px rgba(77, 159, 255, 0.3); transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--border-hover); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: rgba(77, 159, 255, 0.06); transform: translateY(-2px); }
+  .btn-download { background: linear-gradient(135deg, rgba(16, 217, 122, 0.2), rgba(77, 159, 255, 0.2)); color: var(--accent-3); border-color: rgba(16, 217, 122, 0.5); }
+  .btn-download:hover { background: linear-gradient(135deg, rgba(16, 217, 122, 0.3), rgba(77, 159, 255, 0.3)); color: #fff; box-shadow: 0 0 30px rgba(16, 217, 122, 0.35); transform: translateY(-2px); }
+
+  .objective { max-width: 780px; font-size: 0.95rem; line-height: 1.75; color: var(--text-dim); padding-left: 20px; border-left: 2px solid var(--border-hover); }
+
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 40px 0; max-width: 740px; }
+  .stat-item { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 14px; text-align: center; transition: all var(--transition); cursor: pointer; min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
+  .stat-item:hover { border-color: var(--border-hover); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--accent); font-family: var(--mono); line-height: 1; margin-bottom: 8px; }
+  .stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; line-height: 1.4; }
+  @media (max-width: 480px) { .stat-item { padding: 16px 10px; } .stat-value { font-size: 1.5rem; } .stat-label { font-size: 0.6rem; } }
+
+  .hint { margin-top: 28px; font-family: var(--mono); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.05em; }
+  .hint kbd { font-family: var(--mono); font-size: 0.7rem; padding: 2px 6px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 4px; color: var(--text); }
+
+  .projects-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px; }
+  .project-search { flex: 1; min-width: 220px; position: relative; }
+  .project-search input {
+    width: 100%; background: var(--glass); backdrop-filter: blur(10px);
+    border: 1px solid var(--border); border-radius: var(--radius-pill);
+    padding: 10px 42px 10px 42px; color: var(--text); font-family: var(--font);
+    font-size: 0.85rem; outline: none; transition: all 0.25s;
+  }
+  .project-search input::placeholder { color: var(--text-muted); }
+  .project-search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(77, 159, 255, 0.1); }
+  .project-search > svg.search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text-muted); pointer-events: none; }
+  .project-search .kbd-hint { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); font-family: var(--mono); font-size: 0.65rem; color: var(--text-muted); padding: 2px 6px; border: 1px solid var(--border); border-radius: 4px; pointer-events: none; }
+  .project-search.has-value .kbd-hint { display: none; }
+  .project-search .search-clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 4px 8px; border-radius: 50%; display: none; }
+  .project-search.has-value .search-clear { display: block; }
+  .project-search .search-clear:hover { color: var(--accent); }
+
+  .btn-shuffle, .sort-select {
+    background: transparent; border: 1px solid var(--border); color: var(--text-dim);
+    padding: 10px 18px; border-radius: var(--radius-pill); font-size: 0.78rem;
+    font-family: var(--font); cursor: pointer; transition: all 0.25s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-shuffle:hover { color: var(--accent); border-color: var(--accent); background: rgba(77, 159, 255, 0.06); }
+  .btn-shuffle svg { width: 14px; height: 14px; }
+  .sort-select { padding-right: 32px; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; }
+  .sort-select:focus { border-color: var(--accent); color: var(--accent); outline: none; }
+  .sort-select option { background: #0a0f1a; color: var(--text); }
+
+  .active-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; min-height: 0; }
+  .active-chips:empty { display: none; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: var(--radius-pill); font-size: 0.72rem; font-family: var(--mono); background: rgba(77, 159, 255, 0.1); color: var(--accent); border: 1px solid rgba(77, 159, 255, 0.25); }
+  .chip button { background: transparent; border: none; color: inherit; cursor: pointer; padding: 0 2px; font-size: 0.85rem; line-height: 1; }
+  .chip button:hover { color: #fff; }
+  .chip-clear { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 5px 12px; border-radius: var(--radius-pill); font-size: 0.7rem; font-family: var(--font); cursor: pointer; transition: all 0.2s; }
+  .chip-clear:hover { color: var(--accent); border-color: var(--accent); }
+
+  .no-results { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); font-family: var(--mono); font-size: 0.85rem; }
+  .no-results small { display: block; margin-top: 12px; color: var(--text-muted); font-size: 0.75rem; }
+  .no-results button { margin-top: 16px; background: transparent; border: 1px solid var(--border); color: var(--accent); padding: 8px 18px; border-radius: var(--radius-pill); font-family: var(--font); font-size: 0.75rem; cursor: pointer; transition: all 0.25s; }
+  .no-results button:hover { border-color: var(--accent); background: rgba(77, 159, 255, 0.06); }
+
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 7px 18px; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 500; font-family: var(--font); cursor: pointer; transition: all 0.25s; }
+  .filter-btn:hover { color: var(--text); border-color: var(--border-hover); }
+  .filter-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(77, 159, 255, 0.08); }
+  .filter-btn .count { font-family: var(--mono); font-size: 0.65rem; opacity: 0.6; margin-left: 4px; }
+
+  .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+  .project-card { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; display: flex; flex-direction: column; transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition); position: relative; overflow: hidden; cursor: pointer; content-visibility: auto; contain-intrinsic-size: 280px; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0; transition: opacity 0.35s; }
+  .project-card:hover { transform: translateY(-4px); border-color: var(--border-hover); box-shadow: var(--shadow-md); }
+  .project-card:hover::before { opacity: 1; }
+  .project-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .project-card h3 { font-size: 1rem; margin-bottom: 8px; line-height: 1.35; }
+  .project-tech { display: inline-block; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 14px; }
+  .project-card p { font-size: 0.85rem; line-height: 1.6; flex-grow: 1; margin: 0; }
+  .project-card.featured { border-color: rgba(16, 217, 122, 0.35); background: linear-gradient(160deg, rgba(16, 217, 122, 0.06) 0%, var(--glass) 60%); }
+  .project-card.featured .project-tech { color: var(--accent-3); }
+  .project-card.featured::before { background: linear-gradient(90deg, transparent, var(--accent-3), transparent); opacity: 0.6; }
+  .project-card.hidden { display: none; }
+  .project-badge { position: absolute; top: 16px; right: 16px; font-family: var(--mono); font-size: 0.6rem; padding: 3px 8px; border-radius: var(--radius-pill); background: rgba(16, 217, 122, 0.15); color: var(--accent-3); border: 1px solid rgba(16, 217, 122, 0.3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .project-card .expand-icon { position: absolute; bottom: 12px; right: 16px; color: var(--text-muted); opacity: 0; transition: opacity 0.3s, transform 0.3s; font-size: 0.9rem; }
+  .project-card:hover .expand-icon { opacity: 1; transform: translateX(3px); }
+
+  .resume-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  @media (max-width: 860px) { .resume-grid { grid-template-columns: 1fr; } }
+
+  .resume-block { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; margin-bottom: 20px; }
+  .resume-block > h3 { font-size: 0.85rem; font-family: var(--mono); letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; font-weight: 500; }
+
+  .experience-item { padding-left: 18px; margin-bottom: 22px; border-left: 2px solid var(--border-hover); position: relative; }
+  .experience-item:last-child { margin-bottom: 0; }
+  .experience-item::before { content: ''; position: absolute; left: -5px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .experience-item h3 { font-size: 0.95rem; margin-bottom: 4px; }
+  .experience-item .meta { font-family: var(--mono); font-size: 0.72rem; color: var(--accent-2); margin-bottom: 8px; }
+  .experience-item p { font-size: 0.83rem; line-height: 1.6; margin: 0; }
+
+  .skill-group-title { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-4); margin: 20px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .skill-group-title:first-child { margin-top: 0; }
+
+  .skill-bar-container { margin-bottom: 14px; }
+  .skill-bar-label { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text); margin-bottom: 6px; }
+  .skill-bar-label span:last-child { font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); }
+  .skill-bar-bg { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.05); border-radius: 2px; overflow: hidden; }
+  .skill-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 2px; transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px var(--accent); }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .skill-tag { display: inline-block; padding: 4px 12px; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 500; background: rgba(77, 159, 255, 0.08); color: var(--accent); border: 1px solid rgba(77, 159, 255, 0.2); transition: all 0.25s; cursor: pointer; }
+  .skill-tag:hover { background: rgba(77, 159, 255, 0.18); transform: translateY(-1px); }
+  .skill-tag.green { color: var(--accent-3); border-color: rgba(16, 217, 122, 0.25); background: rgba(16, 217, 122, 0.08); }
+  .skill-tag.green:hover { background: rgba(16, 217, 122, 0.18); }
+  .skill-tag.gold { color: var(--accent-4); border-color: rgba(245, 200, 75, 0.25); background: rgba(245, 200, 75, 0.08); }
+  .skill-tag.gold:hover { background: rgba(245, 200, 75, 0.18); }
+
+  .cert-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: var(--text); }
+  .cert-item:last-child { border-bottom: none; }
+  .cert-item span:last-child { font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); }
+
+  .contact-form { display: flex; flex-direction: column; gap: 14px; max-width: 520px; }
+  .contact-form input, .contact-form textarea { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 13px 18px; color: var(--text); font-family: var(--font); font-size: 0.87rem; outline: none; transition: all 0.25s; }
+  .contact-form input::placeholder, .contact-form textarea::placeholder { color: var(--text-muted); }
+  .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(77, 159, 255, 0.1); }
+  .contact-form textarea { min-height: 120px; resize: vertical; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(10px); z-index: 1200; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+  .modal-panel { background: var(--glass-strong); backdrop-filter: blur(20px); border: 1px solid var(--border-hover); border-radius: var(--radius); box-shadow: var(--shadow-lg); max-width: 780px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 40px; position: relative; transform: scale(0.95); transition: transform 0.3s; }
+  .modal-overlay.open .modal-panel { transform: scale(1); }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: transparent; border: 1px solid var(--border); color: var(--text); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: all 0.25s; }
+  .modal-close:hover { border-color: var(--accent); color: var(--accent); }
+  .modal-panel h3 { font-size: 1.5rem; margin-bottom: 8px; color: #fff; padding-right: 40px; }
+  .modal-panel .modal-tech { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .modal-panel .modal-body { font-size: 0.92rem; line-height: 1.8; color: var(--text-dim); }
+  .modal-panel .modal-body h4 { font-size: 0.95rem; color: var(--accent); margin-top: 20px; margin-bottom: 10px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
+  .modal-panel .modal-body h4:first-child { margin-top: 0; }
+  .modal-panel .modal-body ul, .modal-panel .modal-body ol { padding-left: 22px; margin-top: 8px; margin-bottom: 8px; }
+  .modal-panel .modal-body li { margin-bottom: 5px; }
+  .modal-panel .modal-body strong { color: var(--text); }
+  .modal-panel .modal-body p { margin-bottom: 10px; }
+  .modal-panel .modal-body code { background: rgba(77, 159, 255, 0.1); padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 0.85em; color: var(--accent); }
+
+  .modal-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); align-items: center; }
+  .modal-actions .btn { padding: 9px 18px; font-size: 0.78rem; }
+  .modal-nav-hint { margin-left: auto; font-family: var(--mono); font-size: 0.68rem; color: var(--text-muted); }
+  @media (max-width: 600px) { .modal-nav-hint { display: none; } }
+
+  .cmd-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: flex-start; justify-content: center; padding-top: 15vh; opacity: 0; visibility: hidden; transition: opacity 0.25s, visibility 0.25s; }
+  .cmd-overlay.open { opacity: 1; visibility: visible; }
+  .cmd-palette { width: 90%; max-width: 560px; background: var(--glass-strong); backdrop-filter: blur(20px); border: 1px solid var(--border-hover); border-radius: var(--radius); box-shadow: var(--shadow-lg); overflow: hidden; transform: translateY(-20px) scale(0.98); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .cmd-overlay.open .cmd-palette { transform: translateY(0) scale(1); }
+
+  .cmd-input-wrapper { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .cmd-input-wrapper svg { width: 18px; height: 18px; color: var(--text-muted); }
+  .cmd-input { flex: 1; background: transparent; border: none; color: var(--text); font-size: 1rem; outline: none; font-family: var(--font); }
+  .cmd-input::placeholder { color: var(--text-muted); }
+  .cmd-hint { font-family: var(--mono); font-size: 0.65rem; padding: 3px 8px; border-radius: var(--radius-sm); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: var(--text-muted); }
+  .cmd-results { max-height: 380px; overflow-y: auto; padding: 8px; }
+  .cmd-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.15s; color: var(--text); font-size: 0.9rem; border: 1px solid transparent; }
+  .cmd-item:hover, .cmd-item.selected { background: rgba(77, 159, 255, 0.08); border-color: var(--border); }
+  .cmd-item .cmd-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); background: rgba(77, 159, 255, 0.1); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.85rem; flex-shrink: 0; }
+  .cmd-item .cmd-info { flex: 1; }
+  .cmd-item .cmd-desc { font-size: 0.75rem; color: var(--text-muted); }
+  .cmd-item .cmd-shortcut { font-family: var(--mono); font-size: 0.65rem; color: var(--text-muted); padding: 3px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .cmd-empty { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+
+  .toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 1100; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+  .toast { background: var(--glass-strong); backdrop-filter: blur(16px); border: 1px solid var(--border-hover); border-radius: var(--radius); padding: 14px 18px; min-width: 260px; color: var(--text); font-size: 0.85rem; box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 12px; pointer-events: auto; transform: translateX(120%); animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; border-left: 3px solid var(--accent); }
+  .toast.success { border-left-color: var(--accent-3); }
+  .toast.error { border-left-color: #ef4444; }
+  .toast.achievement { border-left-color: var(--accent-4); }
+  .toast .toast-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
+  .toast.success .toast-icon { color: var(--accent-3); }
+  .toast.achievement .toast-icon { color: var(--accent-4); }
+  @keyframes slideIn { to { transform: translateX(0); } }
+  .toast.out { animation: slideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+  @keyframes slideOut { to { transform: translateX(120%); opacity: 0; } }
+
+  .shortcuts-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.25s, visibility 0.25s; padding: 20px; }
+  .shortcuts-overlay.open { opacity: 1; visibility: visible; }
+  .shortcuts-panel { width: 100%; max-width: 480px; background: var(--glass-strong); backdrop-filter: blur(20px); border: 1px solid var(--border-hover); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-lg); transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .shortcuts-overlay.open .shortcuts-panel { transform: scale(1); }
+  .shortcuts-panel h3 { font-size: 1.1rem; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .shortcuts-list { display: flex; flex-direction: column; gap: 4px; }
+  .shortcut-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .shortcut-row:last-child { border-bottom: none; }
+  .shortcut-row .shortcut-desc { font-size: 0.85rem; color: var(--text-dim); }
+  .shortcut-row kbd { font-family: var(--mono); font-size: 0.7rem; padding: 4px 10px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3); }
+
+  .instructions { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: var(--radius-pill); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--text-dim); z-index: 100; pointer-events: none; border: 1px solid var(--border); white-space: nowrap; }
+  .instructions strong { color: var(--accent-2); font-weight: 500; }
+  @media (max-width: 640px) { .instructions { font-size: 0.6rem; padding: 6px 14px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    #cursor-glow { display: none; }
+    section { opacity: 1; transform: none; }
+    #canvas-container { display: none; }
+  }
+
+  @media print {
+    #canvas-container, #cursor-glow, nav, .section-dots, #hud-stats, #back-top,
+    .instructions, .toast-container, .modal-overlay, .cmd-overlay,
+    .shortcuts-overlay, #loader, #progress-bar { display: none !important; }
+    body { background: #fff; color: #000; cursor: auto; }
+    .content-wrapper { padding: 20px; }
+    section { opacity: 1 !important; transform: none !important; min-height: 0; }
+    h1, h2, h3 { color: #000; }
+    p, .objective { color: #333; }
+    .resume-block, .project-card { background: #fff; border-color: #ccc; }
+  }
+
+  ::selection { background: rgba(77, 159, 255, 0.3); color: #fff; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: rgba(77, 159, 255, 0.3); border-radius: 4px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--radius-sm); }
+</style>
+</head>
+<body>
+
+<a href="#home" class="skip-link">Skip to content</a>
+
+<div id="loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Building Neural Network</div>
+  <div class="loader-progress"><div class="loader-progress-fill" id="loader-progress"></div></div>
+</div>
+
+<div id="cursor-glow"></div>
+<div id="canvas-container"></div>
+<div id="progress-bar"></div>
+
+<div class="section-dots" role="navigation" aria-label="Section navigation">
+  <button class="dot active" data-target="home" data-label="Home" aria-label="Home"></button>
+  <button class="dot" data-target="projects" data-label="Projects" aria-label="Projects"></button>
+  <button class="dot" data-target="resume" data-label="Resume" aria-label="Resume"></button>
+  <button class="dot" data-target="contact" data-label="Contact" aria-label="Contact"></button>
+</div>
+
+<nav id="main-nav">
+  <div class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    PRATAP<span>.CH</span>
+  </div>
+  <div class="nav-links">
+    <a href="#home" class="nav-link active">Home</a>
+    <a href="#projects" class="nav-link">Projects</a>
+    <a href="#resume" class="nav-link">Resume</a>
+    <a href="#contact" class="nav-link">Contact</a>
+    <div class="nav-clock" id="live-clock">--:--:--</div>
+    <button class="nav-btn" id="cmd-trigger" aria-label="Command palette" title="Ctrl+K">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span class="label">Search</span>
+    </button>
+    <button class="nav-btn" id="theme-toggle" aria-label="Theme" title="Change theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </button>
+    <button class="nav-btn" id="music-toggle" aria-label="Audio" title="Ambient audio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      <span class="label">Audio</span>
+    </button>
+    <button class="nav-btn" id="fps-toggle" aria-label="Performance mode" title="Toggle performance mode">⚡</button>
+  </div>
+  <button class="nav-burger" id="nav-burger" aria-label="Menu" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<div class="mobile-drawer" id="mobile-drawer">
+  <button class="drawer-close" id="drawer-close" aria-label="Close">✕</button>
+  <a href="#home">Home</a>
+  <a href="#projects">Projects</a>
+  <a href="#resume">Resume</a>
+  <a href="#contact">Contact</a>
+  <a href="#" id="mobile-resume-dl">Download Resume</a>
+</div>
+
+<div id="hud-stats">
+  <div class="hud-chip" id="node-count"><span class="live-dot"></span>Loading...</div>
+  <div class="hud-chip" id="fps-counter">FPS: --</div>
+  <div class="hud-chip" id="session-time">Session: 00:00</div>
+</div>
+
+<button id="back-top" aria-label="Back to top">↑</button>
+
+<div class="content-wrapper">
+
+  <section id="home">
+    <span class="hero-tag">Data Analytics · AI · Machine Learning</span>
+    <h1>Pratap Choudhary</h1>
+    <div id="typewriter"></div>
+
+    <div class="contact-info">
+      <a href="mailto:pratapchoudhary8843@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        pratapchoudhary8843@gmail.com
+      </a>
+      <button data-copy="8237462052" aria-label="Copy phone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        8237462052
+        <span class="copy-badge">Copy</span>
+      </button>
+      <span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Nalasopara East, Maharashtra/Mumbai
+      </span>
+      <a href="https://linkedin.com/in/pratap-choudhary-131382373" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+
+    <div class="btn-group">
+      <button id="download-resume" class="btn btn-download">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Resume (PDF)
+      </button>
+      <a href="#resume" class="btn btn-primary">View Resume</a>
+      <a href="mailto:pratapchoudhary8843@gmail.com" class="btn btn-ghost">Get In Touch</a>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item" data-jump="projects">
+        <div class="stat-value" data-count="16" data-suffix="+">0</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div class="stat-item" data-jump="resume">
+        <div class="stat-value" data-count="3">0</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+      <div class="stat-item" data-jump="resume">
+        <div class="stat-value" data-count="9.2" data-decimals="1">0</div>
+        <div class="stat-label">CGPA · Sem 2 · FY BSc</div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 12px;">Career Objective</h3>
+    <p class="objective">
+      A highly motivated and detail-oriented First-Year BSc Data Science student (currently in Semester 2 with a 9.2 CGPA) with a strong foundation in Python programming, data analysis, and machine learning concepts. Passionate about leveraging data-driven approaches to solve real-world problems and develop intelligent systems. Possessing hands-on experience in building projects such as a Driver Safety System using OpenCV and an Attendance Management System using web technologies.
+    </p>
+
+    <p class="hint">// Brain-shaped neural network · <strong style="color:var(--accent)">Hover</strong> to rotate · <strong style="color:var(--accent)">Click</strong> to pulse · Press <kbd>/</kbd> to search projects</p>
+  </section>
+
+  <section id="projects">
+    <h2>Projects &amp; Experiments</h2>
+
+    <div class="projects-toolbar">
+      <div class="project-search" id="project-search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="project-search" placeholder="Search by name, tech, or skill tag..." autocomplete="off" aria-label="Search projects">
+        <span class="kbd-hint">/</span>
+        <button class="search-clear" id="project-search-clear" aria-label="Clear search">✕</button>
+      </div>
+      <button class="btn-shuffle" id="btn-shuffle" title="Open a random project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        Random
+      </button>
+      <select class="sort-select" id="sort-select" aria-label="Sort projects">
+        <option value="default">Sort: Default</option>
+        <option value="az">Sort: A → Z</option>
+        <option value="za">Sort: Z → A</option>
+        <option value="featured">Sort: Featured first</option>
+      </select>
+    </div>
+
+    <div class="filter-bar" role="tablist">
+      <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All <span class="count" data-count-for="all">0</span></button>
+      <button class="filter-btn" data-filter="ai" role="tab" aria-selected="false">AI / ML <span class="count" data-count-for="ai">0</span></button>
+      <button class="filter-btn" data-filter="agent" role="tab" aria-selected="false">AI Agent <span class="count" data-count-for="agent">0</span></button>
+      <button class="filter-btn" data-filter="cv" role="tab" aria-selected="false">Computer Vision <span class="count" data-count-for="cv">0</span></button>
+      <button class="filter-btn" data-filter="web" role="tab" aria-selected="false">Web <span class="count" data-count-for="web">0</span></button>
+      <button class="filter-btn" data-filter="python" role="tab" aria-selected="false">Python <span class="count" data-count-for="python">0</span></button>
+    </div>
+
+    <div class="active-chips" id="active-chips" aria-live="polite"></div>
+
+    <div class="project-grid" id="project-grid" role="list">
+
+      <div class="project-card" data-cat="web" role="listitem" tabindex="0" data-tags="clock time html css javascript frontend"
+        data-title="Real-Time Clock — Web-Based Digital Clock"
+        data-tech="HTML5 · CSS3 · JavaScript"
+        data-desc="<h4>Overview</h4><p>Real-Time Clock is a simple web application that displays the current time dynamically. The clock updates automatically without requiring the user to refresh the webpage.</p><h4>Objective</h4><ul><li>Displays the current hours, minutes, and seconds</li><li>Updates automatically every second</li><li>Provides a clean and user-friendly interface</li><li>Demonstrates JavaScript real-time functionality</li></ul><h4>Key Features</h4><ul><li>Real-time time display</li><li>Automatic update every second</li><li>Digital clock interface</li><li>Responsive webpage design</li></ul><h4>Skills Demonstrated</h4><ul><li>HTML structure</li><li>CSS styling</li><li>JavaScript DOM manipulation</li><li>Date and Time functions</li><li>Event/timer handling</li></ul>">
+        <h3>Real-Time Clock — Web-Based Digital Clock</h3>
+        <span class="project-tech">HTML5 · CSS3 · JavaScript</span>
+        <p>Real-Time Clock is a simple web application that displays the current time dynamically. The clock updates automatically without requiring the user to refresh the webpage.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="ai" role="listitem" tabindex="0" data-tags="chatbot desktop assistant tkinter python ai"
+        data-title="Pratap AI Generative — Desktop AI Assistant & Chatbot"
+        data-tech="Python · Tkinter · AI · JSON"
+        data-desc="<h4>Overview</h4><p>Pratap AI Generative is a Python-based desktop assistant designed to provide an interactive chatbot-style experience.</p><h4>Key Features</h4><ul><li>Desktop graphical interface</li><li>Chatbot-style conversation</li><li>User input processing</li><li>Automated responses</li><li>Interactive user experience</li></ul><h4>Working</h4><ol><li>User launches the desktop application</li><li>The Tkinter interface is displayed</li><li>User enters a query</li><li>The application processes the query</li><li>The assistant generates or retrieves an appropriate response</li><li>The response is displayed in the chat interface</li></ol><h4>Skills Demonstrated</h4><ul><li>Python programming</li><li>Tkinter GUI development</li><li>API integration concepts</li><li>Conversational AI</li></ul>">
+        <h3>Pratap AI Generative — Desktop AI Assistant &amp; Chatbot</h3>
+        <span class="project-tech">Python · Tkinter · AI · JSON</span>
+        <p>Pratap AI Generative is a Python-based desktop assistant designed to provide an interactive chatbot-style experience. The system allows users to communicate with the assistant through a graphical interface.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="cv" role="listitem" tabindex="0" data-tags="gesture opencv mediapipe computer vision hands"
+        data-title="PP Gesture Control System — Computer Vision Based Gesture Interface"
+        data-tech="Python · OpenCV · MediaPipe · NumPy"
+        data-desc="<h4>Overview</h4><p>PP Gesture Control System is a computer-vision-based project that allows users to interact with a computer through hand gestures.</p><h4>Key Features</h4><ul><li>Real-time camera input</li><li>Hand detection</li><li>Hand landmark tracking</li><li>Gesture recognition</li><li>Gesture-based commands</li></ul><h4>Working</h4><ol><li>The webcam captures live video</li><li>OpenCV processes each frame</li><li>MediaPipe detects the user's hand</li><li>Hand landmarks are identified</li><li>The system analyzes landmark positions</li><li>Recognized gestures are mapped to specific commands</li></ol><h4>Skills Demonstrated</h4><ul><li>Computer vision</li><li>OpenCV</li><li>MediaPipe</li><li>Real-time image processing</li></ul>">
+        <h3>PP Gesture Control System</h3>
+        <span class="project-tech">Python · OpenCV · MediaPipe · NumPy</span>
+        <p>PP Gesture Control System is a computer-vision-based project that allows users to interact with a computer through hand gestures using a camera to detect hand movements.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="web" role="listitem" tabindex="0" data-tags="quiz analytics javascript web"
+        data-title="Pratap Quiz Analytics Platform — Interactive Quiz & Performance Analysis System"
+        data-tech="HTML5 · CSS3 · JavaScript"
+        data-desc="<h4>Overview</h4><p>Pratap Quiz Analytics Platform is a web-based application designed to conduct quizzes and analyze user performance.</p><h4>Key Features</h4><ul><li>Interactive questions</li><li>Multiple-choice questions</li><li>Automatic score calculation</li><li>Answer validation</li><li>Performance analysis</li></ul><h4>Skills Demonstrated</h4><ul><li>Frontend development</li><li>JavaScript programming</li><li>DOM manipulation</li><li>Data processing</li><li>User interface design</li></ul>">
+        <h3>Pratap Quiz Analytics Platform</h3>
+        <span class="project-tech">HTML5 · CSS3 · JavaScript</span>
+        <p>Pratap Quiz Analytics Platform is a web-based application designed to conduct quizzes and analyze user performance, combining a quiz interface with analytics.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="web" role="listitem" tabindex="0" data-tags="attendance students web javascript"
+        data-title="Attendance Management System — Web-Based Student Attendance Application"
+        data-tech="HTML · CSS · JavaScript"
+        data-desc="<h4>Overview</h4><p>Attendance Management System is designed to digitally manage student attendance.</p><h4>Key Features</h4><ul><li>Student attendance interface</li><li>Present/Absent marking</li><li>Attendance calculation</li><li>Student records</li><li>Attendance summary</li></ul><h4>Possible Future Enhancements</h4><ul><li>MySQL database</li><li>Login system</li><li>Faculty dashboard</li><li>Monthly reports</li><li>Export to Excel/PDF</li></ul><h4>Skills Demonstrated</h4><ul><li>Web development</li><li>JavaScript</li><li>Data handling</li><li>UI development</li></ul>">
+        <h3>Attendance Management System</h3>
+        <span class="project-tech">HTML · CSS · JavaScript</span>
+        <p>Attendance Management System is designed to digitally manage student attendance. It replaces or reduces the need for manually maintaining attendance records.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="python" role="listitem" tabindex="0" data-tags="atm banking python"
+        data-title="ATM Banking System — Banking Transaction Simulation"
+        data-tech="Python · Programming Logic"
+        data-desc="<h4>Overview</h4><p>ATM Banking System is a software project that simulates common ATM operations.</p><h4>Key Features</h4><ul><li>PIN authentication</li><li>Balance inquiry</li><li>Cash withdrawal</li><li>Deposit</li><li>Insufficient balance handling</li><li>User menu</li></ul><h4>Skills Demonstrated</h4><ul><li>Python programming</li><li>Conditional logic</li><li>Functions</li><li>Loops</li><li>Input validation</li></ul>">
+        <h3>ATM Banking System</h3>
+        <span class="project-tech">Python · Programming Logic</span>
+        <p>ATM Banking System is a software project that simulates common ATM operations. It demonstrates how banking transactions can be implemented using programming logic.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="cv" role="listitem" tabindex="0" data-tags="game face racing opencv mediapipe pygame"
+        data-title="Face Racing Game — Computer Vision Based Interactive Game"
+        data-tech="Python · OpenCV · MediaPipe · Pygame · NumPy"
+        data-desc="<h4>Overview</h4><p>Face Racing Game is an interactive computer-vision-based game where facial/head movements can be used to control gameplay.</p><h4>Key Features</h4><ul><li>Webcam-based interaction</li><li>Face/head movement detection</li><li>Real-time game control</li><li>Collision detection</li><li>Score tracking</li></ul><h4>Skills Demonstrated</h4><ul><li>Computer Vision</li><li>OpenCV</li><li>MediaPipe</li><li>Pygame</li><li>Game development</li></ul>">
+        <h3>Face Racing Game</h3>
+        <span class="project-tech">Python · OpenCV · MediaPipe · Pygame</span>
+        <p>Face Racing Game is an interactive computer-vision-based game where facial/head movements can be used to control gameplay, combining Python, OpenCV, MediaPipe, and Pygame.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="python" role="listitem" tabindex="0" data-tags="invoice generator tkinter python"
+        data-title="Invoice Generator System — Python Desktop Application"
+        data-tech="Python · Tkinter · File Handling"
+        data-desc="<h4>Overview</h4><p>Invoice Generator System is a Python-based desktop application designed to generate professional invoices.</p><h4>Key Features</h4><ul><li>Customer information</li><li>Product/service information</li><li>Automatic subtotal calculation</li><li>Tax calculation</li><li>Grand total calculation</li><li>Invoice generation</li></ul><h4>Skills Demonstrated</h4><ul><li>Python</li><li>Tkinter</li><li>GUI development</li><li>File handling</li><li>Business application development</li></ul>">
+        <h3>Invoice Generator System</h3>
+        <span class="project-tech">Python · Tkinter · File Handling</span>
+        <p>Invoice Generator System is a Python-based desktop application designed to generate professional invoices. Users can enter customer and product information, calculate totals, and generate an invoice.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="ai" role="listitem" tabindex="0" data-tags="education ai educonnect learning platform"
+        data-title="AI EduConnect — AI-Powered Teaching & Learning Platform"
+        data-tech="Python · AI · HTML · CSS · JavaScript · APIs"
+        data-desc="<h4>Overview</h4><p>AI EduConnect is an AI-powered educational platform concept designed to connect students, learning resources, and intelligent educational assistance.</p><h4>Key Features</h4><ul><li>AI chatbot/assistant</li><li>Educational question answering</li><li>Learning resource management</li><li>Personalized assistance</li></ul><h4>Possible Advanced Features</h4><ul><li>AI-generated quizzes</li><li>Personalized study plans</li><li>Notes summarization</li><li>Student performance analytics</li></ul><h4>Skills Demonstrated</h4><ul><li>AI application development</li><li>Generative AI concepts</li><li>Web development</li><li>API integration</li></ul>">
+        <h3>AI EduConnect — AI-Powered Teaching Platform</h3>
+        <span class="project-tech">Python · AI · Web Technologies</span>
+        <p>AI EduConnect is an AI-powered educational platform concept designed to connect students, learning resources, and intelligent educational assistance to improve the digital learning experience.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card featured" data-cat="cv" role="listitem" tabindex="0" data-tags="driver safety opencv mediapipe ml computer vision"
+        data-title="Driver Safety System & Cognitive Assessment System v2.0 — AI-Based Driver Monitoring"
+        data-tech="Python · OpenCV · MediaPipe · NumPy · ML"
+        data-desc="<h4>Overview</h4><p>Driver Safety System & Cognitive Assessment System v2.0 is a computer-vision-based safety application designed to monitor driver-related visual indicators in real time.</p><h4>Key Features</h4><ul><li>Real-time webcam processing</li><li>Face detection</li><li>Facial landmark detection</li><li>Eye-related monitoring</li><li>Head-position monitoring</li><li>Alert mechanism</li></ul><h4>Example Applications</h4><ul><li>Driver monitoring</li><li>Safety research</li><li>Fatigue-awareness systems</li><li>Computer-vision research</li></ul><h4>Skills Demonstrated</h4><ul><li>Computer vision</li><li>OpenCV</li><li>MediaPipe</li><li>Real-time image processing</li><li>Python</li></ul>">
+        <span class="project-badge">Featured</span>
+        <h3>Driver Safety System &amp; Cognitive Assessment System v2.0</h3>
+        <span class="project-tech">Python · OpenCV · MediaPipe · ML</span>
+        <p>Driver Safety System & Cognitive Assessment System v2.0 is a computer-vision-based safety application designed to monitor driver-related visual indicators in real time.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="ai" role="listitem" tabindex="0" data-tags="jarvis voice assistant automation python"
+        data-title="J.A.R.V.I.S — Personal AI Assistant (Ultra Improved Version)"
+        data-tech="Python · Speech Recognition · TTS · APIs · Automation"
+        data-desc="<h4>Overview</h4><p>J.A.R.V.I.S is a personal AI assistant project inspired by voice-controlled digital assistants.</p><h4>Key Features</h4><ul><li>Voice command processing</li><li>Text-to-speech responses</li><li>Command recognition</li><li>Web search integration</li><li>Application/task automation</li></ul><h4>Example Commands</h4><ul><li>Open an application</li><li>Search for information</li><li>Tell the time</li><li>Answer questions</li></ul><h4>Skills Demonstrated</h4><ul><li>Python</li><li>Voice processing</li><li>Automation</li><li>API integration</li><li>Natural language interaction</li></ul>">
+        <h3>J.A.R.V.I.S — Personal AI Assistant</h3>
+        <span class="project-tech">Python · AI · Voice · Automation</span>
+        <p>J.A.R.V.I.S is a personal AI assistant project inspired by voice-controlled digital assistants. The system accepts user commands and performs different assistant-oriented tasks.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="ai" role="listitem" tabindex="0" data-tags="power bi dashboard placement analytics student"
+        data-title="Student Placement Career Success Dashboard — Power BI Analytics Project"
+        data-tech="Power BI · Power Query · DAX · Excel/CSV"
+        data-desc="<h4>Overview</h4><p>Student Placement Career Success Dashboard is a Power BI data analytics and visualization project designed to analyze student placement and career-related information.</p><h4>Key Features</h4><ul><li>Interactive dashboard</li><li>KPI cards</li><li>Placement statistics</li><li>Student performance analysis</li><li>Salary/package analysis</li><li>Filters and slicers</li></ul><h4>Possible KPIs</h4><ul><li>Total Students</li><li>Placed Students</li><li>Placement Rate</li><li>Average Salary</li><li>Average CGPA</li></ul><h4>Skills Demonstrated</h4><ul><li>Data cleaning</li><li>Power Query</li><li>DAX</li><li>Data visualization</li><li>Business intelligence</li></ul>">
+        <h3>Student Placement Career Success Dashboard</h3>
+        <span class="project-tech">Power BI · DAX · Power Query</span>
+        <p>Student Placement Career Success Dashboard is a Power BI data analytics and visualization project designed to analyze student placement and career-related information into interactive visual insights.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="python" role="listitem" tabindex="0" data-tags="hospital sql mysql database"
+        data-title="Hospital Management System using SQL"
+        data-tech="SQL · MySQL · Database Design · ER Modeling"
+        data-desc="<h4>Overview</h4><p>Hospital Management System is a database management project developed using SQL.</p><h4>Possible Database Tables</h4><ul><li>Patients</li><li>Doctors</li><li>Departments</li><li>Appointments</li><li>Medical Records</li><li>Billing</li></ul><h4>SQL Concepts Demonstrated</h4><ul><li>CREATE, INSERT, SELECT, UPDATE, DELETE</li><li>WHERE, ORDER BY, GROUP BY, HAVING</li><li>JOIN (Inner, Left, Right)</li><li>Aggregate functions</li><li>Primary keys and Foreign keys</li></ul><h4>Skills Demonstrated</h4><ul><li>Database design</li><li>ER modeling</li><li>SQL query development</li><li>Relational data management</li></ul>">
+        <h3>Hospital Management System using SQL</h3>
+        <span class="project-tech">SQL · MySQL · Database Design</span>
+        <p>Hospital Management System is a database management project developed using SQL. It organizes and manages hospital-related information in a structured relational database.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="ai" role="listitem" tabindex="0" data-tags="loan prediction ml xgboost streamlit"
+        data-title="Loan Approval Prediction | Machine Learning + Streamlit"
+        data-tech="Python · Pandas · NumPy · Scikit-learn · XGBoost · Streamlit · Joblib"
+        data-desc="<h4>Overview</h4><p>Loan Approval Prediction is an end-to-end Machine Learning project developed to predict the loan approval status of an applicant.</p><p><strong>Complete pipeline:</strong> Data → Preprocessing → EDA → Feature Engineering → Model Training → Model Evaluation → Model Saving → Streamlit Deployment → Prediction</p><h4>Dataset Information</h4><ul><li>~4,269 records</li><li>13 features</li><li>80% Training Data / 20% Testing Data</li></ul><h4>Technology Stack</h4><ul><li><strong>Data Manipulation:</strong> Pandas, NumPy</li><li><strong>Visualization:</strong> Matplotlib, Seaborn</li><li><strong>Machine Learning:</strong> Scikit-learn, XGBoost</li><li><strong>Model Storage:</strong> Joblib</li><li><strong>Deployment:</strong> Streamlit</li></ul><h4>Machine Learning Algorithms Tested</h4><ul><li>Logistic Regression</li><li>Decision Tree Classifier</li><li>Support Vector Machine (SVM)</li><li>K-Nearest Neighbors (K=5)</li><li>Random Forest</li><li>AdaBoost</li><li>Gradient Boosting</li><li>Stacking Classifier</li><li>XGBoost</li></ul><h4>Model Comparison (Reported Accuracies)</h4><ul><li>Logistic Regression: <strong>93.44%</strong></li><li>Decision Tree Classifier: <strong>97.42%</strong></li><li>SVM: <strong>91.80%</strong></li><li>KNN (K=5): <strong>88.06%</strong></li><li>Random Forest: <strong>96.84%</strong></li><li>AdaBoost: <strong>96.49%</strong></li><li>Gradient Boosting: <strong>97.31%</strong></li><li>Stacking Classifier: <strong>97.31%</strong></li><li>XGBoost: <strong>97.89%</strong> (best)</li></ul><h4>Key Features</h4><ul><li>Complete ML pipeline</li><li>9 classification algorithms compared</li><li>Comprehensive evaluation metrics</li><li>Model persistence with Joblib</li><li>Interactive Streamlit interface</li></ul><h4>Skills Demonstrated</h4><ul><li>Python programming</li><li>Data cleaning, EDA, feature engineering</li><li>Classification, ensemble learning</li><li>Streamlit + Joblib deployment</li></ul>">
+        <h3>Loan Approval Prediction — Machine Learning + Streamlit</h3>
+        <span class="project-tech">Python · Scikit-Learn · XGBoost · Streamlit</span>
+        <p>An end-to-end Machine Learning project that predicts loan approval status based on applicant and loan-related attributes. Trains 9 classification algorithms (XGBoost achieved 97.89% accuracy), evaluates them with multiple metrics, and deploys the best model through Streamlit.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card" data-cat="ai" role="listitem" tabindex="0" data-tags="traffic safety random forest streamlit ml"
+        data-title="Traffic Safety Prediction System — Machine Learning Based Traffic Risk Prediction"
+        data-tech="Python · Pandas · NumPy · Scikit-learn · Random Forest · Streamlit · Joblib"
+        data-desc="<h4>Overview</h4><p>Traffic Safety Prediction System is a Machine Learning-based application designed to analyze traffic and environmental conditions and predict the safety/risk condition of a particular traffic situation.</p><h4>Technologies Used</h4><ul><li><strong>Programming:</strong> Python</li><li><strong>Data Science &amp; ML:</strong> Pandas, NumPy, Scikit-learn</li><li><strong>Visualization:</strong> Matplotlib, Seaborn</li><li><strong>Model:</strong> Random Forest Classifier</li><li><strong>Deployment:</strong> Streamlit</li></ul><h4>Features Used</h4><ul><li><strong>Traffic Volume</strong> — Number of vehicles present on the road</li><li><strong>Weather</strong> — Weather conditions that may affect traffic safety</li><li><strong>Hour</strong> — Time of day</li><li><strong>Day</strong> — Calendar day</li><li><strong>Weekday</strong> — Whether the day is a weekday</li><li><strong>Accidents</strong> — Historical accident-related information</li></ul><h4>System Workflow</h4><ol><li>Collect and clean traffic data</li><li>Perform EDA to identify patterns</li><li>Encode categorical features</li><li>Split data into training and testing sets</li><li>Train Random Forest Classifier</li><li>Evaluate model performance</li><li>Save trained model with Joblib</li><li>Deploy via Streamlit interface</li></ol><h4>Skills Demonstrated</h4><ul><li>Python programming</li><li>Data analysis and cleaning</li><li>Machine Learning with Scikit-learn</li><li>Streamlit deployment</li></ul>">
+        <h3>Traffic Safety Prediction System</h3>
+        <span class="project-tech">Python · Random Forest · Streamlit · Joblib</span>
+        <p>A Machine Learning application that analyzes traffic and environmental conditions (traffic volume, weather, hour, day, weekday, accidents) to predict the safety/risk of a traffic situation. Uses a Random Forest Classifier deployed through Streamlit.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+      <div class="project-card featured" data-cat="agent" role="listitem" tabindex="0" data-tags="ai agent code review n8n claude llm codeguardian"
+        data-title="CodeGuardian AI — Autonomous Coding Assistant"
+        data-tech="Python · n8n · Claude Sonnet · AI Agent · LLM"
+        data-desc="<h4>Overview</h4><p>CodeGuardian AI is an autonomous AI-powered coding assistant designed to analyze source code, identify syntax and logical errors, explain the root cause, and provide optimized solutions. Built using Python, n8n, and Claude Sonnet, the agent automates the code-review and debugging workflow while providing actionable recommendations for code quality, performance, and security.</p><h4>Objective</h4><ul><li>Automate code review and debugging workflows</li><li>Detect syntax, logical, and structural errors in source code</li><li>Explain the root cause of each issue in plain language</li><li>Suggest corrected and optimized code</li><li>Provide security-focused recommendations</li><li>Demonstrate autonomous AI agent workflow using n8n</li></ul><h4>Key Features</h4><ul><li>🤖 Autonomous AI-based code analysis</li><li>🐛 Bug and error detection</li><li>🔍 Root-cause explanation</li><li>🛠️ Corrected code suggestions</li><li>⚡ Performance optimization</li><li>🔐 Security-focused recommendations</li><li>🔄 Automated workflow using n8n</li><li>🧠 Claude Sonnet as the AI reasoning model</li></ul><h4>Technology Stack</h4><ul><li><strong>Programming:</strong> Python</li><li><strong>Workflow Automation:</strong> n8n</li><li><strong>AI Model:</strong> Claude Sonnet (Anthropic)</li><li><strong>Architecture:</strong> AI Agent with tool-calling / reasoning loop</li><li><strong>Input:</strong> Source code files / snippets</li></ul><h4>System Workflow</h4><ol><li>User submits source code to the agent</li><li>n8n triggers the analysis pipeline</li><li>Code is parsed and structured into analyzable segments</li><li>Claude Sonnet performs reasoning over the code</li><li>Agent detects syntax errors, logical flaws, and security risks</li><li>Root cause is explained for each issue</li><li>Corrected / optimized code is generated</li><li>Recommendations for performance and security are returned</li><li>Results are delivered back to the user</li></ol><h4>Example Use Cases</h4><ul><li>Automated code review for student projects</li><li>Debugging assistance for developers</li><li>Security auditing of small codebases</li><li>Performance optimization suggestions</li><li>Educational tool for learning best practices</li></ul><h4>Skills Demonstrated</h4><ul><li>Python programming</li><li>AI agent architecture</li><li>LLM integration (Claude Sonnet)</li><li>Workflow automation with n8n</li><li>Prompt engineering</li><li>Code analysis and reasoning</li><li>Security-aware code review</li></ul><h4>Learning Outcome</h4><p>This project demonstrates how autonomous AI agents can be combined with workflow automation tools to build practical developer tooling that performs reasoning, debugging, and code-quality analysis without manual intervention.</p>">
+        <span class="project-badge">Featured</span>
+        <h3>CodeGuardian AI — Autonomous Coding Assistant</h3>
+        <span class="project-tech">Python · n8n · Claude Sonnet · AI Agent</span>
+        <p>An autonomous AI-powered coding assistant that analyzes source code, detects syntax and logical errors, explains root causes, and provides optimized solutions. Built with Python, n8n, and Claude Sonnet to automate the code-review and debugging workflow with security and performance recommendations.</p>
+        <span class="expand-icon">→</span>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="resume">
+    <h2>Resume &amp; Experience</h2>
+
+    <div class="resume-grid">
+      <div>
+        <div class="resume-block">
+          <h3>Work Experience</h3>
+          <div class="experience-item">
+            <h3>GenAI Powered Data Analytics — Job Simulation</h3>
+            <div class="meta">TATA Group · Forage · 07/2026</div>
+            <p>Performed Exploratory Data Analysis (EDA) and risk profiling. Used AI techniques to predict customer delinquency. Created business reports and data storytelling insights. Developed an AI-driven collections strategy.</p>
+          </div>
+        </div>
+
+        <div class="resume-block">
+          <h3>Education</h3>
+          <div class="experience-item">
+            <h3>FY BSc Data Science</h3>
+            <div class="meta">Mumbai University · 2025 – 2026 · 9.2 CGPA (Second Semester)</div>
+          </div>
+          <div class="experience-item">
+            <h3>12th Grade</h3>
+            <div class="meta">Maharashtra State Board · 2024 – 2025</div>
+          </div>
+          <div class="experience-item">
+            <h3>10th Grade</h3>
+            <div class="meta">Maharashtra State Board · 2023</div>
+          </div>
+        </div>
+
+        <div class="resume-block">
+          <h3>Certifications</h3>
+          <div class="cert-item"><span>Generative AI Foundation Certification</span><span>28-09-2025</span></div>
+          <div class="cert-item"><span>Python Programming Certification</span><span>30-12-2025</span></div>
+          <div class="cert-item"><span>Artificial Intelligence Fundamentals</span><span>25-06-2026</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="resume-block">
+          <h3>Skills</h3>
+          <div class="skill-group-title">Languages &amp; Web</div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>Python</span><span>92%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="92"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>JavaScript</span><span>75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="75"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>HTML / CSS</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>SQL</span><span>80%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="80"></div></div></div>
+
+          <div class="skill-group-title">AI · ML · Computer Vision</div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>OpenCV</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>MediaPipe</span><span>80%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="80"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>Scikit-Learn</span><span>82%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="82"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>XGBoost</span><span>75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="75"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>AI Agent / LLM Integration</span><span>78%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="78"></div></div></div>
+
+          <div class="skill-group-title">Data Analytics</div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>NumPy</span><span>88%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="88"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>Pandas</span><span>88%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="88"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>Matplotlib</span><span>80%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="80"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>Seaborn</span><span>78%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="78"></div></div></div>
+
+          <div class="skill-group-title">Frameworks, Databases &amp; Tools</div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>Streamlit</span><span>85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="85"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>Power BI</span><span>75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="75"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>Tkinter</span><span>78%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="78"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>MySQL</span><span>75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="75"></div></div></div>
+          <div class="skill-bar-container"><div class="skill-bar-label"><span>n8n Workflow Automation</span><span>75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-width="75"></div></div></div>
+        </div>
+
+        <div class="resume-block">
+          <h3>Tech Stack</h3>
+          <div class="skill-tags">
+            <span class="skill-tag" data-skill-jump="Python">Python</span>
+            <span class="skill-tag gold" data-skill-jump="HTML">HTML</span>
+            <span class="skill-tag green" data-skill-jump="CSS">CSS</span>
+            <span class="skill-tag" data-skill-jump="JavaScript">JavaScript</span>
+            <span class="skill-tag green" data-skill-jump="OpenCV">OpenCV</span>
+            <span class="skill-tag gold" data-skill-jump="MediaPipe">MediaPipe</span>
+            <span class="skill-tag" data-skill-jump="Scikit-Learn">Scikit-Learn</span>
+            <span class="skill-tag green" data-skill-jump="XGBoost">XGBoost</span>
+            <span class="skill-tag gold" data-skill-jump="Streamlit">Streamlit</span>
+            <span class="skill-tag" data-skill-jump="NumPy">NumPy</span>
+            <span class="skill-tag green" data-skill-jump="Pandas">Pandas</span>
+            <span class="skill-tag gold" data-skill-jump="Matplotlib">Matplotlib</span>
+            <span class="skill-tag" data-skill-jump="Seaborn">Seaborn</span>
+            <span class="skill-tag green" data-skill-jump="Power BI">Power BI</span>
+            <span class="skill-tag gold" data-skill-jump="MySQL">MySQL</span>
+            <span class="skill-tag" data-skill-jump="Tkinter">Tkinter</span>
+            <span class="skill-tag green" data-skill-jump="Pygame">Pygame</span>
+            <span class="skill-tag gold" data-skill-jump="DAX">DAX</span>
+            <span class="skill-tag" data-skill-jump="AI Agent">AI Agent</span>
+            <span class="skill-tag green" data-skill-jump="n8n">n8n</span>
+            <span class="skill-tag gold" data-skill-jump="Claude Sonnet">Claude Sonnet</span>
+          </div>
+        </div>
+
+        <div class="resume-block">
+          <h3>Soft Skills</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Problem Solving</span>
+            <span class="skill-tag green">Analytical Thinking</span>
+            <span class="skill-tag gold">Time Management</span>
+            <span class="skill-tag">Quick Learner</span>
+            <span class="skill-tag green">Adaptability</span>
+          </div>
+        </div>
+
+        <div class="resume-block">
+          <h3>Extracurricular &amp; Hobbies</h3>
+          <p style="font-size: 0.85rem;">Actively working on real-world projects. Participating in coding and technical learning. Exploring AI, AI Agents and Data Science technologies.</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Book Reading</span>
+            <span class="skill-tag green">Technical Coding</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Get In Touch</h2>
+    <p style="margin-bottom: 28px; max-width: 520px;">Have a project, opportunity, or just want to say hello? Drop a message and I'll get back to you.</p>
+
+    <form class="contact-form" id="contact-form" onsubmit="event.preventDefault(); window.location.href='mailto:pratapchoudhary8843@gmail.com?subject=' + encodeURIComponent(document.getElementById('cf-subject').value) + '&body=' + encodeURIComponent(document.getElementById('cf-message').value);">
+      <input type="text" id="cf-name" placeholder="Your Name" required>
+      <input type="email" id="cf-email" placeholder="Your Email" required>
+      <input type="text" id="cf-subject" placeholder="Subject" required>
+      <textarea id="cf-message" placeholder="Your Message..." required></textarea>
+      <button type="submit" class="btn btn-primary" style="align-self: flex-start;">Send Message →</button>
+    </form>
+  </section>
+
+</div>
+
+<div class="modal-overlay" id="project-modal" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+  <div class="modal-panel" onclick="event.stopPropagation()">
+    <button class="modal-close" id="project-modal-close" aria-label="Close">✕</button>
+    <h3 id="pm-title">Project Title</h3>
+    <div class="modal-tech" id="pm-tech">Tech · Stack</div>
+    <div class="modal-body" id="pm-body">Description</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="pm-copy-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        Copy link
+      </button>
+      <button class="btn btn-ghost" id="pm-prev" aria-label="Previous project">← Prev</button>
+      <button class="btn btn-ghost" id="pm-next" aria-label="Next project">Next →</button>
+      <span class="modal-nav-hint">Use ← / → keys</span>
+    </div>
+  </div>
+</div>
+
+<div class="cmd-overlay" id="cmd-overlay" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="cmd-palette" onclick="event.stopPropagation()">
+    <div class="cmd-input-wrapper">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="cmd-input" id="cmd-input" placeholder="Type a command or search..." autocomplete="off">
+      <span class="cmd-hint">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmd-results"></div>
+  </div>
+</div>
+
+<div class="shortcuts-overlay" id="shortcuts-overlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+  <div class="shortcuts-panel" onclick="event.stopPropagation()">
+    <h3>Keyboard Shortcuts</h3>
+    <div class="shortcuts-list">
+      <div class="shortcut-row"><span class="shortcut-desc">Open command palette</span><kbd>Ctrl + K</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Show shortcuts</span><kbd>?</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Focus project search</span><kbd>/</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Toggle theme</span><kbd>T</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Toggle performance mode</span><kbd>P</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd>G then H</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Go to Projects</span><kbd>G then P</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Go to Resume</span><kbd>G then R</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd>G then C</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Download resume</span><kbd>D</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Navigate projects (in modal)</span><kbd>← / →</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Close dialog</span><kbd>ESC</kbd></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<div class="instructions"><strong>HOVER</strong> rotates brain · <strong>CLICK</strong> pulses · <strong>/</strong> search · <strong>CTRL+K</strong> commands</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ============================================
+   TOASTS (with queue)
+   ============================================ */
+const Toast = {
+  _queue: [],
+  _showing: false,
+  show(msg, type = 'info', duration = 3000) {
+    this._queue.push({ msg, type, duration });
+    if (!this._showing) this._next();
+  },
+  _next() {
+    if (this._queue.length === 0) { this._showing = false; return; }
+    this._showing = true;
+    const { msg, type, duration } = this._queue.shift();
+    const c = document.getElementById('toast-container');
+    const icons = {
+      success: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+      error: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+      achievement: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5L17 22l-5-3-5 3 1.5-8.5"/></svg>',
+      info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+    };
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.innerHTML = `<div class="toast-icon">${icons[type] || icons.info}</div><div>${msg}</div>`;
+    c.appendChild(el);
+    setTimeout(() => {
+      el.classList.add('out');
+      setTimeout(() => { el.remove(); this._next(); }, 300);
+    }, duration);
+  }
+};
+
+const Prefs = {
+  get(k, d) { try { return localStorage.getItem('pratap_' + k) || d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('pratap_' + k, v); } catch {} }
+};
+
+let audioCtxGlobal = null;
+const SFX = {
+  ctx() { if (!audioCtxGlobal) audioCtxGlobal = new (window.AudioContext || window.webkitAudioContext)(); return audioCtxGlobal; },
+  tone(freq, duration, type = 'sine', gain = 0.04) {
+    try {
+      const ctx = this.ctx();
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      g.gain.setValueAtTime(gain, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+      osc.connect(g).connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch {}
+  },
+  click() { this.tone(600, 0.06, 'sine', 0.03); },
+  whoosh() { this.tone(220, 0.15, 'triangle', 0.02); },
+  achievement() { this.tone(880, 0.1, 'sine', 0.04); setTimeout(() => this.tone(1320, 0.2, 'sine', 0.03), 100); }
+};
+
+const THEMES = ['midnight', 'aurora', 'nebula', 'solar'];
+(() => {
+  document.documentElement.setAttribute('data-theme', Prefs.get('theme', 'midnight'));
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || 'midnight';
+    const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
+    document.documentElement.setAttribute('data-theme', next);
+    Prefs.set('theme', next);
+    SFX.click();
+    Toast.show(`Theme: ${next.charAt(0).toUpperCase() + next.slice(1)}`, 'info', 1800);
+  });
+})();
+
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 700);
+});
+
+(() => {
+  const el = document.getElementById('live-clock');
+  const tick = () => {
+    const n = new Date(); const p = v => String(v).padStart(2, '0');
+    el.textContent = `${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
+  };
+  tick(); setInterval(tick, 1000);
+})();
+
+(() => {
+  const el = document.getElementById('session-time');
+  const start = Date.now();
+  let paused = 0;
+  let hiddenAt = 0;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { hiddenAt = Date.now(); }
+    else if (hiddenAt) { paused += Date.now() - hiddenAt; hiddenAt = 0; }
+  });
+  const tick = () => {
+    const s = Math.floor((Date.now() - start - paused) / 1000);
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    el.textContent = `Session: ${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  };
+  tick(); setInterval(tick, 1000);
+})();
+
+(() => {
+  const text = 'Data Analyst · AI & ML Enthusiast · Python';
+  const el = document.getElementById('typewriter');
+  let i = 0;
+  const step = () => { if (i < text.length) { el.textContent += text.charAt(i++); setTimeout(step, 45); } };
+  setTimeout(step, 1100);
+})();
+
+(() => {
+  const glow = document.getElementById('cursor-glow');
+  let tx = 0, ty = 0, cx = 0, cy = 0;
+  document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+  const loop = () => {
+    cx += (tx - cx) * 0.15; cy += (ty - cy) * 0.15;
+    glow.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+    requestAnimationFrame(loop);
+  };
+  loop();
+})();
+
+(() => {
+  const nav = document.getElementById('main-nav');
+  const bar = document.getElementById('progress-bar');
+  const top = document.getElementById('back-top');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const max = document.body.scrollHeight - window.innerHeight;
+        bar.style.width = (window.scrollY / max * 100) + '%';
+        top.classList.toggle('show', window.scrollY > 500);
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+  top.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+})();
+
+(() => {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-link');
+  const dots = document.querySelectorAll('.section-dots .dot');
+  const visited = new Set();
+  let allVisited = false;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+        dots.forEach(d => d.classList.toggle('active', d.dataset.target === id));
+        visited.add(id);
+        if (!allVisited && visited.size === sections.length) {
+          allVisited = true;
+          setTimeout(() => {
+            SFX.achievement();
+            Toast.show('🏆 Achievement unlocked — Explored all sections', 'achievement', 4000);
+          }, 500);
+        }
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => obs.observe(s));
+  dots.forEach(d => d.addEventListener('click', () => {
+    SFX.whoosh();
+    const t = document.getElementById(d.dataset.target);
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+  }));
+})();
+
+(() => {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('section').forEach(s => obs.observe(s));
+})();
+
+// Stat counters: run once per element
+(() => {
+  const done = new WeakSet();
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !done.has(e.target)) {
+        done.add(e.target);
+        const el = e.target;
+        const target = parseFloat(el.dataset.count);
+        const dec = parseInt(el.dataset.decimals || 0);
+        const suf = el.dataset.suffix || '';
+        const dur = 1600;
+        const start = performance.now();
+        const update = (now) => {
+          const p = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = (target * eased).toFixed(dec) + suf;
+          if (p < 1) requestAnimationFrame(update);
+        };
+        requestAnimationFrame(update);
+        obs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-value').forEach(s => obs.observe(s));
+
+  document.querySelectorAll('.stat-item[data-jump]').forEach(s => {
+    s.addEventListener('click', () => {
+      SFX.whoosh();
+      const t = document.getElementById(s.dataset.jump);
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+})();
+
+/* === PROJECTS: filter + search + sort + shuffle + chips === */
+const ProjectFilter = (() => {
+  const grid = document.getElementById('project-grid');
+  const cards = Array.from(grid.querySelectorAll('.project-card'));
+  const buttons = document.querySelectorAll('.filter-btn');
+  const searchWrap = document.getElementById('project-search-wrap');
+  const searchInput = document.getElementById('project-search');
+  const searchClear = document.getElementById('project-search-clear');
+  const sortSelect = document.getElementById('sort-select');
+  const chipsEl = document.getElementById('active-chips');
+
+  const counts = { all: cards.length, ai: 0, agent: 0, cv: 0, web: 0, python: 0 };
+  cards.forEach(c => counts[c.dataset.cat] = (counts[c.dataset.cat] || 0) + 1);
+  document.querySelectorAll('[data-count-for]').forEach(el => el.textContent = counts[el.dataset.countFor] || 0);
+
+  let activeFilter = Prefs.get('filter', 'all');
+  let query = '';
+  let sortMode = 'default';
+
+  buttons.forEach(b => {
+    const isActive = b.dataset.filter === activeFilter;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+
+  function renderChips() {
+    chipsEl.innerHTML = '';
+    if (activeFilter !== 'all') {
+      const label = activeFilter === 'agent' ? 'AI Agent' : activeFilter === 'ai' ? 'AI / ML' : activeFilter === 'cv' ? 'Computer Vision' : activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1);
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `Filter: ${label} <button aria-label="Remove filter">✕</button>`;
+      chip.querySelector('button').addEventListener('click', () => {
+        activeFilter = 'all';
+        buttons.forEach(b => { b.classList.toggle('active', b.dataset.filter === 'all'); b.setAttribute('aria-selected', b.dataset.filter === 'all' ? 'true' : 'false'); });
+        Prefs.set('filter', 'all');
+        apply(); SFX.click();
+      });
+      chipsEl.appendChild(chip);
+    }
+    if (query.trim()) {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `Search: "${query.trim()}" <button aria-label="Clear search">✕</button>`;
+      chip.querySelector('button').addEventListener('click', () => {
+        query = ''; searchInput.value = ''; searchWrap.classList.remove('has-value'); apply(); SFX.click();
+      });
+      chipsEl.appendChild(chip);
+    }
+    if (chipsEl.children.length > 0) {
+      const clearAll = document.createElement('button');
+      clearAll.className = 'chip-clear';
+      clearAll.textContent = 'Clear all';
+      clearAll.addEventListener('click', () => {
+        activeFilter = 'all'; query = '';
+        searchInput.value = ''; searchWrap.classList.remove('has-value');
+        buttons.forEach(b => { b.classList.toggle('active', b.dataset.filter === 'all'); b.setAttribute('aria-selected', b.dataset.filter === 'all' ? 'true' : 'false'); });
+        Prefs.set('filter', 'all');
+        apply(); SFX.click();
+      });
+      chipsEl.appendChild(clearAll);
+    }
+  }
+
+  function sortCards() {
+    if (sortMode === 'default') return;
+    const sorted = [...cards].sort((a, b) => {
+      if (sortMode === 'featured') {
+        const af = a.classList.contains('featured') ? 0 : 1;
+        const bf = b.classList.contains('featured') ? 0 : 1;
+        if (af !== bf) return af - bf;
+        return a.dataset.title.localeCompare(b.dataset.title);
+      }
+      const at = a.dataset.title.toLowerCase();
+      const bt = b.dataset.title.toLowerCase();
+      return sortMode === 'az' ? at.localeCompare(bt) : bt.localeCompare(at);
+    });
+    sorted.forEach(c => grid.appendChild(c));
+  }
+
+  function apply() {
+    let visibleCount = 0;
+    cards.forEach(c => {
+      const catMatch = activeFilter === 'all' || c.dataset.cat === activeFilter;
+      const q = query.trim().toLowerCase();
+      const searchText = (c.dataset.title + ' ' + c.dataset.tech + ' ' + (c.dataset.tags || '') + ' ' + (c.querySelector('p')?.textContent || '')).toLowerCase();
+      const searchMatch = !q || searchText.includes(q);
+      const show = catMatch && searchMatch;
+      c.classList.toggle('hidden', !show);
+      if (show) visibleCount++;
+    });
+
+    let noRes = grid.querySelector('.no-results');
+    if (visibleCount === 0) {
+      if (!noRes) {
+        noRes = document.createElement('div');
+        noRes.className = 'no-results';
+        grid.appendChild(noRes);
+      }
+      noRes.innerHTML = `// No projects match your filters.<small>Try a different search term or clear filters.</small><button type="button" id="no-res-clear">Clear all filters</button>`;
+      const btn = noRes.querySelector('#no-res-clear');
+      if (btn) btn.addEventListener('click', () => {
+        query = ''; activeFilter = 'all';
+        searchInput.value = ''; searchWrap.classList.remove('has-value');
+        buttons.forEach(b => { b.classList.toggle('active', b.dataset.filter === 'all'); b.setAttribute('aria-selected', b.dataset.filter === 'all' ? 'true' : 'false'); });
+        Prefs.set('filter', 'all');
+        apply();
+      });
+    } else if (noRes) {
+      noRes.remove();
+    }
+
+    renderChips();
+  }
+
+  buttons.forEach(btn => btn.addEventListener('click', () => {
+    SFX.click();
+    buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    activeFilter = btn.dataset.filter;
+    Prefs.set('filter', activeFilter);
+    apply();
+  }));
+
+  let searchTimer;
+  searchInput.addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      query = e.target.value;
+      searchWrap.classList.toggle('has-value', query.length > 0);
+      apply();
+    }, 150);
+  });
+
+  searchClear.addEventListener('click', () => {
+    query = '';
+    searchInput.value = '';
+    searchWrap.classList.remove('has-value');
+    searchInput.focus();
+    apply();
+    SFX.click();
+  });
+
+  sortSelect.addEventListener('change', e => {
+    sortMode = e.target.value;
+    sortCards();
+    SFX.click();
+  });
+
+  apply();
+
+  return {
+    apply,
+    getVisible: () => cards.filter(c => !c.classList.contains('hidden')),
+    getAll: () => cards
+  };
+})();
+
+(() => {
+  document.getElementById('btn-shuffle').addEventListener('click', () => {
+    const visible = ProjectFilter.getVisible();
+    if (visible.length === 0) { Toast.show('No projects to shuffle', 'error', 2000); return; }
+    const pick = visible[Math.floor(Math.random() * visible.length)];
+    ProjectModal.open(pick);
+    SFX.whoosh();
+  });
+})();
+
+(() => {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.skill-bar-fill').forEach((b, i) => {
+          setTimeout(() => { b.style.width = b.dataset.width + '%'; }, i * 60);
+        });
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  const r = document.getElementById('resume');
+  if (r) obs.observe(r);
+})();
+
+(() => {
+  document.querySelectorAll('[data-copy]').forEach(el => {
+    el.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(el.dataset.copy);
+        el.classList.add('copied');
+        el.querySelector('.copy-badge').textContent = 'Copied';
+        SFX.click();
+        Toast.show('Copied to clipboard', 'success', 1500);
+        setTimeout(() => { el.classList.remove('copied'); el.querySelector('.copy-badge').textContent = 'Copy'; }, 1800);
+      } catch { Toast.show('Failed to copy', 'error'); }
+    });
+  });
+})();
+
+(() => {
+  document.querySelectorAll('[data-skill-jump]').forEach(tag => {
+    tag.addEventListener('click', () => {
+      const skill = tag.dataset.skillJump;
+      SFX.click();
+      document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        const search = document.getElementById('project-search');
+        search.value = skill;
+        search.dispatchEvent(new Event('input', { bubbles: true }));
+        Toast.show(`Filtered by: ${skill}`, 'info', 2000);
+      }, 600);
+    });
+  });
+})();
+
+(() => {
+  const burger = document.getElementById('nav-burger');
+  const drawer = document.getElementById('mobile-drawer');
+  const close = document.getElementById('drawer-close');
+  burger.addEventListener('click', () => { drawer.classList.add('open'); burger.setAttribute('aria-expanded', 'true'); SFX.click(); });
+  close.addEventListener('click', () => { drawer.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); SFX.click(); });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => drawer.classList.remove('open')));
+})();
+
+(() => {
+  let ctx = null, osc = null, on = false;
+  const btn = document.getElementById('music-toggle');
+  btn.addEventListener('click', () => {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (!on) {
+      osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.value = 90; g.gain.value = 0.025;
+      osc.connect(g).connect(ctx.destination); osc.start(); on = true;
+      btn.querySelector('.label').textContent = 'On';
+      SFX.click();
+      Toast.show('Ambient audio on', 'info', 1500);
+    } else {
+      osc.stop(); on = false;
+      btn.querySelector('.label').textContent = 'Audio';
+      SFX.click();
+      Toast.show('Ambient audio off', 'info', 1500);
+    }
+  });
+})();
+
+let isLiteMode = Prefs.get('lite', '0') === '1';
+(() => {
+  const btn = document.getElementById('fps-toggle');
+  if (isLiteMode) btn.classList.add('active');
+  btn.addEventListener('click', () => {
+    isLiteMode = !isLiteMode;
+    Prefs.set('lite', isLiteMode ? '1' : '0');
+    btn.classList.toggle('active', isLiteMode);
+    SFX.click();
+    Toast.show(isLiteMode ? '⚡ Performance mode ON' : '🚀 Full quality mode', 'info', 2200);
+    if (window.__applyQuality) window.__applyQuality();
+  });
+})();
+
+/* === PROJECT MODAL === */
+const ProjectModal = (() => {
+  const overlay = document.getElementById('project-modal');
+  const panel = overlay.querySelector('.modal-panel');
+  const titleEl = document.getElementById('pm-title');
+  const techEl = document.getElementById('pm-tech');
+  const bodyEl = document.getElementById('pm-body');
+  const closeBtn = document.getElementById('project-modal-close');
+  const prevBtn = document.getElementById('pm-prev');
+  const nextBtn = document.getElementById('pm-next');
+  const copyLinkBtn = document.getElementById('pm-copy-link');
+  let currentCard = null;
+  let lastFocused = null;
+
+  function getVisibleCards() {
+    return Array.from(document.querySelectorAll('.project-card')).filter(c => !c.classList.contains('hidden'));
+  }
+
+  function open(card) {
+    lastFocused = document.activeElement;
+    currentCard = card;
+    titleEl.textContent = card.dataset.title;
+    techEl.textContent = card.dataset.tech;
+    bodyEl.innerHTML = card.dataset.desc;
+    overlay.classList.add('open');
+    panel.scrollTop = 0;
+    SFX.whoosh();
+    setTimeout(() => closeBtn.focus(), 100);
+  }
+
+  function close() {
+    overlay.classList.remove('open');
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+    currentCard = null;
+  }
+
+  function navigate(dir) {
+    const cards = getVisibleCards();
+    if (cards.length === 0 || !currentCard) return;
+    const idx = cards.indexOf(currentCard);
+    if (idx === -1) return;
+    const next = cards[(idx + dir + cards.length) % cards.length];
+    open(next);
+  }
+
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', () => open(card));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(card); }
+    });
+  });
+
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', close);
+  prevBtn.addEventListener('click', () => navigate(-1));
+  nextBtn.addEventListener('click', () => navigate(1));
+
+  copyLinkBtn.addEventListener('click', async () => {
+    if (!currentCard) return;
+    const title = currentCard.dataset.title;
+    const url = location.origin + location.pathname + '#projects';
+    try {
+      await navigator.clipboard.writeText(`${title} — ${url}`);
+      SFX.click();
+      Toast.show(`Link copied: ${title.split('—')[0].trim()}`, 'success', 2200);
+    } catch {
+      Toast.show('Could not copy link', 'error');
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); navigate(1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  });
+
+  return { open, close };
+})();
+
+const CmdPalette = (() => {
+  const overlay = document.getElementById('cmd-overlay');
+  const input = document.getElementById('cmd-input');
+  const results = document.getElementById('cmd-results');
+  const commands = [
+    { title: 'Go to Home', desc: 'Navigate to hero section', icon: '⌂', shortcut: 'G H', action: () => document.getElementById('home').scrollIntoView({ behavior: 'smooth' }) },
+    { title: 'Go to Projects', desc: 'View all projects', icon: '◈', shortcut: 'G P', action: () => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' }) },
+    { title: 'Go to Resume', desc: 'View resume', icon: '📄', shortcut: 'G R', action: () => document.getElementById('resume').scrollIntoView({ behavior: 'smooth' }) },
+    { title: 'Go to Contact', desc: 'Get in touch', icon: '✉', shortcut: 'G C', action: () => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }) },
+    { title: 'Download Resume', desc: 'Generate PDF resume', icon: '↓', shortcut: 'D', action: () => document.getElementById('download-resume').click() },
+    { title: 'Change Theme', desc: 'Cycle through 4 themes', icon: '◐', shortcut: 'T', action: () => document.getElementById('theme-toggle').click() },
+    { title: 'Toggle Performance', desc: 'Reduce particle count', icon: '⚡', shortcut: 'P', action: () => document.getElementById('fps-toggle').click() },
+    { title: 'Toggle Ambient Audio', desc: 'On / off ambient hum', icon: '♪', action: () => document.getElementById('music-toggle').click() },
+    { title: 'Random Project', desc: 'Open a random project', icon: '🎲', action: () => document.getElementById('btn-shuffle').click() },
+    { title: 'Search Projects', desc: 'Focus project search bar', icon: '🔍', shortcut: '/', action: () => { document.getElementById('projects').scrollIntoView({ behavior: 'smooth' }); setTimeout(() => document.getElementById('project-search').focus(), 500); } },
+    { title: 'Scroll to Top', desc: 'Back to top', icon: '↑', action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+    { title: 'Open LinkedIn', desc: 'Visit LinkedIn profile', icon: 'in', action: () => window.open('https://linkedin.com/in/pratap-choudhary-131382373', '_blank', 'noopener,noreferrer') },
+    { title: 'Send Email', desc: 'Open mail client', icon: '✉', action: () => window.location.href = 'mailto:pratapchoudhary8843@gmail.com' }
+  ];
+  let selected = 0;
+  let filtered = commands;
+  function render() {
+    if (filtered.length === 0) { results.innerHTML = '<div class="cmd-empty">No results</div>'; return; }
+    results.innerHTML = filtered.map((c, i) => `<div class="cmd-item ${i === selected ? 'selected' : ''}" data-index="${i}"><div class="cmd-icon">${c.icon}</div><div class="cmd-info"><div class="cmd-title">${c.title}</div><div class="cmd-desc">${c.desc}</div></div>${c.shortcut ? `<div class="cmd-shortcut">${c.shortcut}</div>` : ''}</div>`).join('');
+    results.querySelectorAll('.cmd-item').forEach(item => item.addEventListener('click', () => { filtered[parseInt(item.dataset.index)].action(); close(); SFX.click(); }));
+  }
+  function open() { overlay.classList.add('open'); input.value = ''; filtered = commands; selected = 0; render(); setTimeout(() => input.focus(), 100); }
+  function close() { overlay.classList.remove('open'); }
+  input.addEventListener('input', e => { const q = e.target.value.toLowerCase(); filtered = commands.filter(c => c.title.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q)); selected = 0; render(); });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); selected = Math.min(selected + 1, filtered.length - 1); render(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); selected = Math.max(selected - 1, 0); render(); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (filtered[selected]) { filtered[selected].action(); close(); SFX.click(); } }
+  });
+  overlay.addEventListener('click', close);
+  return { open, close };
+})();
+
+const Shortcuts = (() => {
+  const overlay = document.getElementById('shortcuts-overlay');
+  return { open: () => overlay.classList.add('open'), close: () => overlay.classList.remove('open') };
+})();
+document.getElementById('shortcuts-overlay').addEventListener('click', () => Shortcuts.close());
+
+(() => {
+  let gPressed = false, gTimer = null;
+  document.addEventListener('keydown', e => {
+    const tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') {
+      if (e.key === 'Escape') { e.target.blur(); CmdPalette.close(); Shortcuts.close(); ProjectModal.close(); }
+      return;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); CmdPalette.open(); return; }
+    if (e.key === '/') { e.preventDefault(); document.getElementById('projects').scrollIntoView({ behavior: 'smooth' }); setTimeout(() => document.getElementById('project-search').focus(), 400); return; }
+    if (e.key === 'Escape') { CmdPalette.close(); Shortcuts.close(); ProjectModal.close(); return; }
+    if (e.key === '?' || (e.shiftKey && e.key === '/')) { e.preventDefault(); Shortcuts.open(); return; }
+    if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey && !e.altKey) { document.getElementById('theme-toggle').click(); return; }
+    if ((e.key === 'd' || e.key === 'D') && !e.ctrlKey && !e.metaKey && !e.altKey) { document.getElementById('download-resume').click(); return; }
+    if ((e.key === 'p' || e.key === 'P') && !e.ctrlKey && !e.metaKey && !e.altKey) { document.getElementById('fps-toggle').click(); return; }
+    if (e.key === 'g' || e.key === 'G') {
+      gPressed = true; clearTimeout(gTimer);
+      gTimer = setTimeout(() => gPressed = false, 800);
+      return;
+    }
+    if (gPressed) {
+      const map = { h: 'home', p: 'projects', r: 'resume', c: 'contact' };
+      const target = map[e.key.toLowerCase()];
+      if (target) document.getElementById(target).scrollIntoView({ behavior: 'smooth' });
+      gPressed = false;
+    }
+  });
+  document.getElementById('cmd-trigger').addEventListener('click', CmdPalette.open);
+})();
+
+/* ============================================
+   RESUME PDF GENERATOR
+   ============================================ */
+const ResumeData = {
+  name: 'Pratap Choudhary',
+  contact: {
+    email: 'pratapchoudhary8843@gmail.com',
+    phone: '8237462052',
+    location: '212 Shop, Sitaram Nagar, Nalasopara East, Maharashtra/Mumbai'
+  },
+  objective: 'A highly motivated and detail-oriented First-Year BSc Data Science student (currently in Semester 2 with a 9.2 CGPA) with a strong foundation in Python programming, data analysis, and machine learning concepts. Passionate about leveraging data-driven approaches to solve real-world problems and develop intelligent systems. Possessing hands-on experience in building projects such as a Driver Safety System using OpenCV and an Attendance Management System using web technologies.',
+  experience: [{
+    title: 'GenAI Powered Data Analytics — Job Simulation',
+    company: 'TATA Group · Forage',
+    date: '07/2026',
+    bullets: [
+      'Performed Exploratory Data Analysis (EDA) and risk profiling.',
+      'Used AI techniques to predict customer delinquency.',
+      'Created business reports and data storytelling insights.',
+      'Developed an AI-driven collections strategy.'
+    ]
+  }],
+  education: [
+    { title: 'FY BSc Data Science', meta: 'Mumbai University · 2025 – 2026 · 9.2 CGPA (Second Semester)' },
+    { title: '12th Grade', meta: 'Maharashtra State Board · 2024 – 2025' },
+    { title: '10th Grade', meta: 'Maharashtra State Board · 2023' }
+  ],
+  projects: [
+    { title: 'CodeGuardian AI — Autonomous Coding Assistant', tech: 'Python · n8n · Claude Sonnet · AI Agent · LLM', bullets: [
+      'Built an autonomous AI-powered coding assistant that analyzes source code and detects syntax / logical errors.',
+      'Integrated Claude Sonnet as the reasoning model for root-cause explanation and code correction.',
+      'Automated the code-review and debugging workflow using n8n.',
+      'Added security-focused and performance optimization recommendations.'
+    ]},
+    { title: 'Traffic Safety Prediction System', tech: 'Python · Scikit-learn · Random Forest · Streamlit · Joblib', bullets: [
+      'Developed a Machine Learning application to predict traffic safety/risk based on traffic and environmental conditions.',
+      'Used features like Traffic Volume, Weather, Hour, Day, Weekday, and historical Accidents.',
+      'Trained a Random Forest Classifier and saved the model using Joblib.',
+      'Deployed the model via a Streamlit web application for real-time predictions.'
+    ]},
+    { title: 'Loan Approval Prediction', tech: 'Python · Scikit-learn · XGBoost · Streamlit · Joblib', bullets: [
+      'Developed an end-to-end ML pipeline to predict loan approval from applicant and loan attributes.',
+      'Performed preprocessing, cleaning, missing-value handling, categorical encoding, and EDA.',
+      'Trained and compared 9 classification algorithms including XGBoost.',
+      'XGBoost achieved 97.89% accuracy. Built a Streamlit interface and saved the model using Joblib.'
+    ]},
+    { title: 'Driver Safety System & Cognitive Assessment System v2.0', tech: 'Python · OpenCV · NumPy · MediaPipe · Streamlit', bullets: [
+      'Developed a driver safety monitoring system using Python, OpenCV, and Machine Learning.',
+      'Used OpenCV for real-time camera/video processing and detection of driver-related visual features.',
+      'Integrated the trained ML model with the application to generate driver safety/risk assessment results.',
+      'Developed an interactive interface using Streamlit for real-time assessment and prediction.'
+    ]},
+    { title: 'University Management System', tech: 'Python · GUI · Tkinter · Pandas · NumPy · ML', bullets: [
+      'Developed a GUI-based University Management System to manage student and academic information.',
+      'Designed an interactive GUI for data entry, viewing, updating, and management.',
+      'Integrated ML functionality to analyze student data and generate predictions.'
+    ]}
+  ],
+  certificates: [
+    { name: 'Generative AI Foundation Certification', date: '28-09-2025' },
+    { name: 'Python Programming Certification', date: '30-12-2025' },
+    { name: 'Artificial Intelligence Fundamentals', date: '25-06-2026' }
+  ],
+  skills: {
+    'Programming': 'Python, JavaScript, HTML, CSS, SQL',
+    'Libraries': 'OpenCV, NumPy, Pandas, Matplotlib, Seaborn, Streamlit, Scikit-Learn, XGBoost',
+    'AI & Agents': 'AI Agent, LLM Integration (Claude Sonnet), Prompt Engineering, n8n Automation',
+    'Concepts': 'Generative AI, Machine Learning Basics, Data Analytics',
+    'Visualization': 'Power BI, DAX, Matplotlib, Seaborn',
+    'Databases': 'PostgreSQL, MySQL, SQL',
+    'Tools': 'VS Code, Replit, PyCharm, Tkinter, Pygame, Joblib, n8n'
+  },
+  softSkills: ['Problem Solving & Analytical Thinking', 'Quick Learner & Adaptability', 'Time Management'],
+  extracurricular: [
+    'Actively working on real-world projects.',
+    'Participating in coding and technical learning.',
+    'Exploring AI, AI Agents and Data Science technologies.'
+  ],
+  hobbies: ['Book Reading', 'Technical Coding']
+};
+
+document.getElementById('download-resume').addEventListener('click', generateResumePDF);
+document.getElementById('mobile-resume-dl').addEventListener('click', e => { e.preventDefault(); generateResumePDF(); });
+
+function generateResumePDF() {
+  try {
+    SFX.click();
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      Toast.show('PDF library not loaded — check your internet connection', 'error', 4000);
+      return;
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    const PAGE_W = 595.28, PAGE_H = 841.89, MARGIN = 40, CONTENT_W = PAGE_W - MARGIN * 2;
+    let y = MARGIN;
+    const NAVY = [30, 58, 95], BLUE = [74, 111, 165], DARK = [26, 26, 26], GRAY = [102, 102, 102], LIGHT_GRAY = [200, 210, 225];
+    const setColor = (rgb) => doc.setTextColor(rgb[0], rgb[1], rgb[2]);
+
+    doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
+    doc.rect(0, 0, PAGE_W, 110, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(26);
+    doc.setTextColor(255, 255, 255);
+    doc.text('PRATAP CHOUDHARY', MARGIN, 50);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(220, 230, 245);
+    doc.text('Data Analyst  ·  AI & ML Enthusiast  ·  Python', MARGIN, 70);
+    doc.setFontSize(9);
+    doc.setTextColor(200, 215, 235);
+    doc.text(`Email: ${ResumeData.contact.email}   |   Phone: ${ResumeData.contact.phone}`, MARGIN, 88);
+    doc.text(`Location: ${ResumeData.contact.location}`, MARGIN, 100);
+    y = 130;
+
+    const sectionTitle = (title) => {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      setColor(NAVY);
+      doc.text(title.toUpperCase(), MARGIN, y);
+      y += 6;
+      doc.setDrawColor(LIGHT_GRAY[0], LIGHT_GRAY[1], LIGHT_GRAY[2]);
+      doc.setLineWidth(0.8);
+      doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+      y += 14;
+    };
+
+    const writeParagraph = (text, fontSize = 10, lineHeight = 14, color = DARK) => {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(fontSize);
+      setColor(color);
+      const lines = doc.splitTextToSize(text, CONTENT_W);
+      lines.forEach(line => {
+        if (y > PAGE_H - MARGIN) { doc.addPage(); y = MARGIN; }
+        doc.text(line, MARGIN, y);
+        y += lineHeight;
+      });
+    };
+
+    const writeBullets = (bullets, fontSize = 9.5, lineHeight = 13) => {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(fontSize);
+      setColor(DARK);
+      bullets.forEach(b => {
+        const lines = doc.splitTextToSize(b, CONTENT_W - 14);
+        if (y > PAGE_H - MARGIN) { doc.addPage(); y = MARGIN; }
+        doc.setFillColor(BLUE[0], BLUE[1], BLUE[2]);
+        doc.circle(MARGIN + 3, y - 3, 1.4, 'F');
+        lines.forEach(line => {
+          if (y > PAGE_H - MARGIN) { doc.addPage(); y = MARGIN; }
+          doc.text(line, MARGIN + 12, y);
+          y += lineHeight;
+        });
+      });
+      y += 2;
+    };
+
+    sectionTitle('Career Objective');
+    writeParagraph(ResumeData.objective, 9.5, 13);
+    y += 6;
+
+    sectionTitle('Work Experience');
+    ResumeData.experience.forEach(e => {
+      if (y > PAGE_H - MARGIN - 40) { doc.addPage(); y = MARGIN; }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10.5);
+      setColor(DARK);
+      doc.text(e.title, MARGIN, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      setColor(GRAY);
+      const tw = doc.getTextWidth(e.date);
+      doc.text(e.date, PAGE_W - MARGIN - tw, y);
+      y += 12;
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(9.5);
+      setColor(BLUE);
+      doc.text(e.company, MARGIN, y);
+      y += 12;
+      writeBullets(e.bullets);
+      y += 4;
+    });
+
+    sectionTitle('Education');
+    ResumeData.education.forEach(e => {
+      if (y > PAGE_H - MARGIN - 25) { doc.addPage(); y = MARGIN; }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      setColor(DARK);
+      doc.text(e.title, MARGIN, y);
+      y += 12;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      setColor(GRAY);
+      doc.text(e.meta, MARGIN, y);
+      y += 16;
+    });
+
+    sectionTitle('Projects Undertaken');
+    ResumeData.projects.forEach(p => {
+      if (y > PAGE_H - MARGIN - 60) { doc.addPage(); y = MARGIN; }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10.5);
+      setColor(DARK);
+      const titleLines = doc.splitTextToSize(p.title, CONTENT_W);
+      titleLines.forEach(line => { doc.text(line, MARGIN, y); y += 13; });
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(8.5);
+      setColor(BLUE);
+      doc.text('Technologies: ' + p.tech, MARGIN, y);
+      y += 12;
+      writeBullets(p.bullets);
+      y += 4;
+    });
+
+    sectionTitle('Certifications');
+    ResumeData.certificates.forEach(c => {
+      if (y > PAGE_H - MARGIN - 20) { doc.addPage(); y = MARGIN; }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9.5);
+      setColor(DARK);
+      doc.text(c.name, MARGIN, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      setColor(GRAY);
+      const w = doc.getTextWidth(c.date);
+      doc.text(c.date, PAGE_W - MARGIN - w, y);
+      y += 5;
+      doc.setDrawColor(LIGHT_GRAY[0], LIGHT_GRAY[1], LIGHT_GRAY[2]);
+      doc.setLineWidth(0.4);
+      doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+      y += 12;
+    });
+
+    sectionTitle('Skills');
+    Object.entries(ResumeData.skills).forEach(([k, v]) => {
+      if (y > PAGE_H - MARGIN - 25) { doc.addPage(); y = MARGIN; }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9.5);
+      setColor(NAVY);
+      doc.text(k + ':', MARGIN, y);
+      doc.setFont('helvetica', 'normal');
+      setColor(DARK);
+      const lines = doc.splitTextToSize(v, CONTENT_W - 90);
+      lines.forEach(line => {
+        if (y > PAGE_H - MARGIN) { doc.addPage(); y = MARGIN; }
+        doc.text(line, MARGIN + 85, y);
+        y += 13;
+      });
+    });
+    y += 4;
+
+    sectionTitle('Soft Skills');
+    writeBullets(ResumeData.softSkills);
+
+    sectionTitle('Extracurricular Activities');
+    writeBullets(ResumeData.extracurricular);
+
+    sectionTitle('Hobbies');
+    writeBullets(ResumeData.hobbies);
+
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      setColor(GRAY);
+      const footer = `Pratap Choudhary  ·  ${ResumeData.contact.email}  ·  ${ResumeData.contact.phone}`;
+      const fw = doc.getTextWidth(footer);
+      doc.text(footer, (PAGE_W - fw) / 2, PAGE_H - 20);
+      doc.text(`Page ${i} of ${totalPages}`, PAGE_W - MARGIN - 40, PAGE_H - 20);
+    }
+
+    doc.save('Pratap_Choudhary_Resume.pdf');
+    Toast.show('✓ Resume downloaded — check your Downloads folder', 'success', 3500);
+  } catch (err) {
+    console.error(err);
+    Toast.show('Download failed — please try again', 'error', 3500);
+  }
+}
+
+/* ============================================
+   THREE.JS — BRAIN-SHAPED NEURAL NETWORK
+   ============================================ */
+const CONFIG = {
+  NEURON_COUNT: 2200,
+  BRAIN_RADIUS: 48,
+  HUB_COUNT: 50,
+  CONNECTIONS_PER_NEURON: 5,
+  MAX_CONNECTION_DIST: 15,
+  FILAMENT_SEGMENTS: 12,
+  FILAMENT_WAVE: 1.6,
+  DUST_COUNT: 6000
+};
+
+const CORE_PALETTE = [0x88ccff, 0xbbddff, 0xffffff, 0xaaddff, 0x66aaff, 0x4d9fff, 0xcce6ff];
+const ACCENT_PALETTE = [0xff8866, 0xffaa44, 0xffcc88, 0xff6644, 0xffd9b0];
+const EMERALD_PALETTE = [0x10d97a, 0x88ffcc, 0x44ffaa];
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000005);
+scene.fog = new THREE.FogExp2(0x000005, 0.0006);
+
+const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 10000);
+camera.position.z = 0;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, isLiteMode ? 1.5 : 2));
+renderer.setClearColor(0x000005, 1);
+document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+const coreVert = `
+  attribute float size;
+  attribute vec3 customColor;
+  varying vec3 vColor;
+  void main() {
+    vColor = customColor;
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    gl_PointSize = size * (750.0 / -mv.z);
+    gl_Position = projectionMatrix * mv;
+  }
+`;
+const coreFrag = `
+  varying vec3 vColor;
+  void main() {
+    vec2 c = gl_PointCoord - vec2(0.5);
+    float d = length(c);
+    if (d > 0.5) discard;
+    float core = pow(max(0.0, 1.0 - d * 10.0), 5.0) * 7.0;
+    float hot = pow(max(0.0, 1.0 - d * 6.0), 4.0) * 2.5;
+    float mid = pow(max(0.0, 1.0 - d * 3.5), 3.5) * 1.2;
+    float halo = pow(max(0.0, 1.0 - d * 2.0), 4.5) * 0.55;
+    float outer = pow(max(0.0, 1.0 - d * 1.3), 7.0) * 0.2;
+    gl_FragColor = vec4(vColor * (core + hot + mid + halo + outer), 1.0);
+  }
+`;
+function makeCoreMaterial() {
+  return new THREE.ShaderMaterial({
+    vertexShader: coreVert, fragmentShader: coreFrag,
+    blending: THREE.AdditiveBlending, depthTest: true, transparent: true
+  });
+}
+
+function isInsideBrain(x, y, z) {
+  const rx = CONFIG.BRAIN_RADIUS;
+  const ry = CONFIG.BRAIN_RADIUS * 0.85;
+  const rz = CONFIG.BRAIN_RADIUS * 0.9;
+  const nx = x / rx, ny = y / ry, nz = z / rz;
+  const dist = nx*nx + ny*ny + nz*nz;
+  if (dist > 1.0) return false;
+  if (y < -CONFIG.BRAIN_RADIUS * 0.55) {
+    if (Math.abs(y) > CONFIG.BRAIN_RADIUS * 0.75) return false;
+  }
+  const fold = Math.sin(x * 0.32) * Math.cos(y * 0.38) * Math.sin(z * 0.28);
+  return dist + fold * 0.18 < 1.0;
+}
+
+function buildBrain(quality) {
+  const neuronPositions = [], neuronColors = [], neuronSizes = [];
+  const targetCount = quality === 'lite' ? 900 : CONFIG.NEURON_COUNT;
+  let attempts = 0;
+  while (neuronPositions.length / 3 < targetCount && attempts < targetCount * 25) {
+    attempts++;
+    const x = (Math.random() - 0.5) * CONFIG.BRAIN_RADIUS * 2.3;
+    const y = (Math.random() - 0.5) * CONFIG.BRAIN_RADIUS * 2.1;
+    const z = (Math.random() - 0.5) * CONFIG.BRAIN_RADIUS * 2.3;
+    if (!isInsideBrain(x, y, z)) continue;
+
+    const distFromCenter = Math.sqrt(x*x + y*y + z*z) / CONFIG.BRAIN_RADIUS;
+    const roll = Math.random();
+    let color;
+    if (roll < 0.04) {
+      color = new THREE.Color(ACCENT_PALETTE[Math.floor(Math.random() * ACCENT_PALETTE.length)]);
+    } else if (roll < 0.06) {
+      color = new THREE.Color(EMERALD_PALETTE[Math.floor(Math.random() * EMERALD_PALETTE.length)]);
+    } else {
+      const baseColor = new THREE.Color(CORE_PALETTE[Math.floor(Math.random() * CORE_PALETTE.length)]);
+      if (distFromCenter > 0.75 && Math.random() < 0.3) {
+        const warm = new THREE.Color(ACCENT_PALETTE[Math.floor(Math.random() * ACCENT_PALETTE.length)]);
+        baseColor.lerp(warm, 0.4);
+      }
+      color = baseColor;
+    }
+
+    const isHubNode = neuronPositions.length / 3 < CONFIG.HUB_COUNT;
+    neuronPositions.push(x, y, z);
+    neuronColors.push(color.r, color.g, color.b);
+    neuronSizes.push(isHubNode ? (3.5 + Math.random() * 2.5) : (0.7 + Math.random() * 1.3));
+  }
+  const NUM_NEURONS = neuronPositions.length / 3;
+
+  const neuronGeo = new THREE.BufferGeometry();
+  neuronGeo.setAttribute('position', new THREE.Float32BufferAttribute(neuronPositions, 3));
+  neuronGeo.setAttribute('customColor', new THREE.Float32BufferAttribute(neuronColors, 3));
+  neuronGeo.setAttribute('size', new THREE.Float32BufferAttribute(neuronSizes, 1));
+  const neurons = new THREE.Points(neuronGeo, makeCoreMaterial());
+
+  const connectionPositions = [], connectionColors = [];
+  const GRID_SIZE = CONFIG.MAX_CONNECTION_DIST * 2;
+  const grid = new Map();
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    const key = `${Math.floor(neuronPositions[i*3]/GRID_SIZE)},${Math.floor(neuronPositions[i*3+1]/GRID_SIZE)},${Math.floor(neuronPositions[i*3+2]/GRID_SIZE)}`;
+    if (!grid.has(key)) grid.set(key, []);
+    grid.get(key).push(i);
+  }
+  const getNearby = (i) => {
+    const x = neuronPositions[i*3], y = neuronPositions[i*3+1], z = neuronPositions[i*3+2];
+    const cx = Math.floor(x/GRID_SIZE), cy = Math.floor(y/GRID_SIZE), cz = Math.floor(z/GRID_SIZE);
+    const result = [];
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) for (let dz = -1; dz <= 1; dz++) {
+      const cell = grid.get(`${cx+dx},${cy+dy},${cz+dz}`);
+      if (cell) result.push(...cell);
+    }
+    return result;
+  };
+
+  const connectionSet = new Set();
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    const xi = neuronPositions[i*3], yi = neuronPositions[i*3+1], zi = neuronPositions[i*3+2];
+    const ri = neuronColors[i*3], gi = neuronColors[i*3+1], bi = neuronColors[i*3+2];
+    const candidates = getNearby(i);
+    const neighbors = [];
+    for (const j of candidates) {
+      if (i === j) continue;
+      const dx = neuronPositions[j*3] - xi, dy = neuronPositions[j*3+1] - yi, dz = neuronPositions[j*3+2] - zi;
+      const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      if (d < CONFIG.MAX_CONNECTION_DIST) neighbors.push({ index: j, dist: d });
+    }
+    neighbors.sort((a, b) => a.dist - b.dist);
+    const connectTo = neighbors.slice(0, CONFIG.CONNECTIONS_PER_NEURON);
+    for (const n of connectTo) {
+      const j = n.index;
+      const key = i < j ? `${i}-${j}` : `${j}-${i}`;
+      if (connectionSet.has(key)) continue;
+      connectionSet.add(key);
+      const xj = neuronPositions[j*3], yj = neuronPositions[j*3+1], zj = neuronPositions[j*3+2];
+      const rj = neuronColors[j*3], gj = neuronColors[j*3+1], bj = neuronColors[j*3+2];
+      const segs = CONFIG.FILAMENT_SEGMENTS;
+      const midX = (xi + xj) * 0.5 + (Math.random() - 0.5) * CONFIG.FILAMENT_WAVE * 2;
+      const midY = (yi + yj) * 0.5 + (Math.random() - 0.5) * CONFIG.FILAMENT_WAVE * 2;
+      const midZ = (zi + zj) * 0.5 + (Math.random() - 0.5) * CONFIG.FILAMENT_WAVE * 2;
+      let prevX = xi, prevY = yi, prevZ = zi;
+      for (let s = 1; s <= segs; s++) {
+        const u = s / segs;
+        const px = (1-u)*(1-u)*xi + 2*(1-u)*u*midX + u*u*xj;
+        const py = (1-u)*(1-u)*yi + 2*(1-u)*u*midY + u*u*yj;
+        const pz = (1-u)*(1-u)*zi + 2*(1-u)*u*midZ + u*u*zj;
+        const cr = ri * (1-u) + rj * u;
+        const cg = gi * (1-u) + gj * u;
+        const cb = bi * (1-u) + bj * u;
+        connectionPositions.push(prevX, prevY, prevZ, px, py, pz);
+        connectionColors.push(cr, cg, cb, cr, cg, cb);
+        prevX = px; prevY = py; prevZ = pz;
+      }
+    }
+  }
+  const connectionGeo = new THREE.BufferGeometry();
+  connectionGeo.setAttribute('position', new THREE.Float32BufferAttribute(connectionPositions, 3));
+  connectionGeo.setAttribute('color', new THREE.Float32BufferAttribute(connectionColors, 3));
+  const connections = new THREE.LineSegments(connectionGeo, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending
+  }));
+
+  return { neurons, connections, NUM_NEURONS, connectionSet };
+}
+
+let brain = buildBrain(isLiteMode ? 'lite' : 'full');
+let brainGroup = new THREE.Group();
+brainGroup.add(brain.neurons);
+brainGroup.add(brain.connections);
+scene.add(brainGroup);
+
+const dustCount = isLiteMode ? 2500 : CONFIG.DUST_COUNT;
+let dust;
+(() => {
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(dustCount * 3);
+  const col = new Float32Array(dustCount * 3);
+  for (let i = 0; i < dustCount; i++) {
+    const dist = 900 * Math.cbrt(Math.random());
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(Math.random() * 2 - 1);
+    pos[i*3] = dist * Math.sin(phi) * Math.cos(theta);
+    pos[i*3+1] = dist * Math.sin(phi) * Math.sin(theta);
+    pos[i*3+2] = dist * Math.cos(phi);
+    const c = new THREE.Color().setHSL(0.58 + Math.random() * 0.08, 0.85, 0.35 + Math.random() * 0.25);
+    col[i*3] = c.r; col[i*3+1] = c.g; col[i*3+2] = c.b;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  dust = new THREE.Points(geo, new THREE.PointsMaterial({
+    size: 1.5, vertexColors: true, transparent: true, opacity: 0.3,
+    blending: THREE.AdditiveBlending, sizeAttenuation: true
+  }));
+  scene.add(dust);
+})();
+
+function updateNodeCount() {
+  document.getElementById('node-count').innerHTML = `<span class="live-dot"></span>Neurons: ${brain.NUM_NEURONS} | Connections: ${brain.connectionSet.size}`;
+}
+updateNodeCount();
+const lp = document.getElementById('loader-progress');
+if (lp) lp.style.width = '100%';
+
+window.__applyQuality = () => {
+  brainGroup.remove(brain.neurons);
+  brainGroup.remove(brain.connections);
+  brain.neurons.geometry.dispose();
+  brain.connections.geometry.dispose();
+  brain = buildBrain(isLiteMode ? 'lite' : 'full');
+  brainGroup.add(brain.neurons);
+  brainGroup.add(brain.connections);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, isLiteMode ? 1.5 : 2));
+  updateNodeCount();
+  if (dust) dust.material.opacity = isLiteMode ? 0.2 : 0.3;
+};
+
+let pulseAmount = 0, targetPulse = 0;
+addEventListener('click', (e) => {
+  if (e.target.closest('.project-card, .btn, .nav-btn, .contact-info a, .contact-info button, .filter-btn, .modal-panel, .cmd-palette, .stat-item, input, textarea, .project-search, select')) return;
+  targetPulse = 1.0;
+  SFX.whoosh();
+});
+
+let targetRotX = 0, targetRotY = 0;
+let currentRotX = 0, currentRotY = 0;
+addEventListener('mousemove', e => {
+  targetRotY = ((e.clientX / innerWidth) - 0.5) * 1.0;
+  targetRotX = -((e.clientY / innerHeight) - 0.5) * 0.7;
+});
+
+const clock = new THREE.Clock();
+let frameCount = 0, lastFps = performance.now();
+const fpsEl = document.getElementById('fps-counter');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let isPageVisible = !document.hidden;
+document.addEventListener('visibilitychange', () => { isPageVisible = !document.hidden; });
+
+function animate() {
+  requestAnimationFrame(animate);
+  if (!isPageVisible) return;
+  const t = clock.getElapsedTime();
+  frameCount++;
+  const now = performance.now();
+  if (now - lastFps > 1000) { fpsEl.textContent = `FPS: ${frameCount}`; frameCount = 0; lastFps = now; }
+
+  currentRotX += (targetRotX - currentRotX) * 0.04;
+  currentRotY += (targetRotY - currentRotY) * 0.04;
+
+  if (!reduceMotion) {
+    brainGroup.rotation.y = currentRotY + t * 0.05;
+    brainGroup.rotation.x = currentRotX + Math.sin(t * 0.12) * 0.05;
+  }
+  targetPulse *= 0.95;
+  pulseAmount += (targetPulse - pulseAmount) * 0.12;
+  const breathe = 1 + Math.sin(t * 0.6) * 0.02;
+  brainGroup.scale.setScalar(breathe + pulseAmount * 0.12);
+
+  if (dust) dust.rotation.y = t * 0.006;
+
+  renderer.render(scene, camera);
+}
+animate();
+
+let resizeTimer;
+addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  }, 150);
+});
+</script>
+</body>
+</html>
